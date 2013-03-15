@@ -3,6 +3,7 @@ package twisted.rubber.ai.library;
 
 import java.util.Vector;
 
+import com.biigoh.controls.Controller;
 import com.biigoh.gameObjects.vehicles.Vehicle;
 import com.biigoh.screens.BattleScreen;
 
@@ -51,11 +52,14 @@ public class Blackboard
 	 */
 	public Vehicle player;
 	
+	public Controller controls;
+	
 	/**
 	 * Creates a new instance of the Blackboard class
 	 */
-	public Blackboard()
-	{
+	public Blackboard(Controller aiControls) {
+		controls = aiControls;
+//		player = vehicleToControl;
 //		this.moveDirection = new Vec2();
 //		this.destination = new Vec2();
 //		this.path = new Vector<Tile>();
