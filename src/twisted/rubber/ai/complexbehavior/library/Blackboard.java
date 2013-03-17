@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 import java.util.Vector;
@@ -12,7 +12,7 @@ import com.biigoh.screens.BattleScreen;
  * Has static members for shared data for all players,
  * and normal members for player-specific data.
  *  
- * @author Ying
+ * @author Moose
  *
  */
 public class Blackboard 

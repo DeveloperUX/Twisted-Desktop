@@ -1,30 +1,31 @@
 package com.biigoh.controls;
 
-import twisted.rubber.ai.controller.AvoidObstacleAction;
-import twisted.rubber.ai.controller.BackAwayFromObstacleAction;
-import twisted.rubber.ai.library.Action;
-import twisted.rubber.ai.library.Blackboard;
-import twisted.rubber.ai.library.ParentActionController;
-import twisted.rubber.ai.library.RegulatorDecorator;
-import twisted.rubber.ai.library.ResetDecorator;
-import twisted.rubber.ai.library.Selector;
-import twisted.rubber.ai.library.Sequence;
+import twisted.rubber.ai.complexbehavior.controller.AvoidObstacleAction;
+import twisted.rubber.ai.complexbehavior.controller.BackAwayFromObstacleAction;
+import twisted.rubber.ai.complexbehavior.library.Action;
+import twisted.rubber.ai.complexbehavior.library.Blackboard;
+import twisted.rubber.ai.complexbehavior.library.ParentActionController;
+import twisted.rubber.ai.complexbehavior.library.RegulatorDecorator;
+import twisted.rubber.ai.complexbehavior.library.ResetDecorator;
+import twisted.rubber.ai.complexbehavior.library.Selector;
+import twisted.rubber.ai.complexbehavior.library.Sequence;
 
 import com.biigoh.gameObjects.vehicles.Vehicle;
 
-public class AiBehavior extends Controller {
+public class AiComplexTree extends Controller {
 
 	/** Root task of the behavior tree for the AI */
-	private Action planner;
-	
-	/** Information blackboard for the AI */
+	private Action rootPlanner;
+	/** Shared information blackboard for all AI objects */
 	private Blackboard blackboard;
+	
+	// DIFFERENT IMPLEMENTATION OF AI
 	
 	/**
 	 * Creates a new instance of the AIInputDevice
 	 * @param playScene Reference to the playScene
 	 */
-	public AiBehavior() {		
+	public AiComplexTree() {		
 		// Set AI the blackboard data.
 		blackboard = new Blackboard(this);	
 		CreateBehaviourTree();
@@ -43,7 +44,7 @@ public class AiBehavior extends Controller {
 	 */
 	@Override
 	public void Start() {
-		this.planner.GetControl().SafeStart();
+		this.rootPlanner.GetControl().SafeStart();
 	}
 
 	/**
@@ -51,9 +52,9 @@ public class AiBehavior extends Controller {
 	 */
 	private void CreateBehaviourTree() {
 		// Planner
-		this.planner = new Selector(blackboard, "Planner");
-		this.planner = new ResetDecorator(blackboard, this.planner, "Planner");
-		this.planner = new RegulatorDecorator(blackboard, this.planner, "Planner", 0.1f);
+		this.rootPlanner = new Selector(blackboard, "Planner");
+		this.rootPlanner = new ResetDecorator(blackboard, this.rootPlanner, "Planner");
+		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
 
 		// Maneuvering between obstacles
 		Action maneuver = new Selector(blackboard, "Maneuver");
@@ -71,7 +72,7 @@ public class AiBehavior extends Controller {
 		((ParentActionController) maneuver.GetControl()).Add(backAway);
 		
 		// Add to planner
-		((ParentActionController) planner.GetControl()).Add(maneuver);
+		((ParentActionController) rootPlanner.GetControl()).Add(maneuver);
 		
 		// Chase enemy vehicle
 //		Action chaseEnemy = new Sequence(blackboard, "Circle chase sequence");
@@ -137,10 +138,12 @@ public class AiBehavior extends Controller {
 		*/
 	}
 	
+	
+	
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		this.planner.DoAction();
+		this.rootPlanner.DoAction();
 	}
 
 }

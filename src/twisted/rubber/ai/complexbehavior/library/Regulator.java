@@ -1,8 +1,8 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 /**
  * Time step class, for regulating update speed of updates.
- * @author Ying
+ * @author Moose
  *
  */
 public class Regulator {

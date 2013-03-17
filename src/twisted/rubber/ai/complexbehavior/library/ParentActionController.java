@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 import java.util.Vector;
@@ -6,7 +6,7 @@ import java.util.Vector;
 /**
  * This class extends the TaskController class to add support for 
  * child tasks and their logic. Used together with ParentTask.
- * @author Ying
+ * @author Moose
  *
  */
 public class ParentActionController extends ActionController 

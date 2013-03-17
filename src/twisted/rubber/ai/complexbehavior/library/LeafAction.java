@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 /**
@@ -9,7 +9,7 @@ package twisted.rubber.ai.library;
  * without burdening the Task class with 
  * complications.
  * 
- * @author Ying
+ * @author Moose
  *
  */
 public abstract class LeafAction extends Action 

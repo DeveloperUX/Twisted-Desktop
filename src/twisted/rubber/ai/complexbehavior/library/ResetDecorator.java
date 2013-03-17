@@ -1,11 +1,11 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 /**
  * Decorator that resets to "Started" the task it is applied to, each time said
  * task finishes.
  * 
- * @author Ying
+ * @author Moose
  *
  */
 public class ResetDecorator extends ActionDecorator 

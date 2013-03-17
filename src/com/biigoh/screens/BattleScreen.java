@@ -27,7 +27,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.biigoh.controls.AIController;
-import com.biigoh.controls.AiBehavior;
+import com.biigoh.controls.AiComplexTree;
 import com.biigoh.controls.FireButton;
 import com.biigoh.controls.HumanController;
 import com.biigoh.controls.Joystick;
@@ -287,7 +287,7 @@ public class BattleScreen extends AbstractScreen {
 			}
 			 
 //			enemy.setController( new AIController(enemy) );
-			enemy.setController( new AiBehavior() );
+			enemy.setController( new AiComplexTree() );
 			enemy.getController().Start();
 						
 			battleArena.addVehicle( enemy );	

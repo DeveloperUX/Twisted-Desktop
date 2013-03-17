@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 import com.badlogic.gdx.Gdx;
 import com.biigoh.controls.Controller;
@@ -15,7 +15,7 @@ import com.badlogic.gdx.Gdx;
  * interface as possible, otherwise the decorators have no security mechanism
  * to ensure they are properly acting as wrappers of their specific tasks.
  * 
- * @author Ying
+ * @author Moose
  *
  */
 public abstract class Action 

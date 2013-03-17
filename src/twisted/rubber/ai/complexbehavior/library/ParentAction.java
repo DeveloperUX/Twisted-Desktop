@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 import com.badlogic.gdx.Gdx;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
  * 
  * Sets a specific kind of TaskController for these kinds of tasks.
  * 
- * @author Ying
+ * @author Moose
  *
  */
 public abstract class ParentAction extends Action 

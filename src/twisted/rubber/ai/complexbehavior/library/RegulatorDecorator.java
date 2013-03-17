@@ -1,10 +1,10 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 
 /**
  * Decorator that adds a update speed limit to the task it is applied to
- * @author Ying
+ * @author Moose
  *
  */
 public class RegulatorDecorator extends ActionDecorator 

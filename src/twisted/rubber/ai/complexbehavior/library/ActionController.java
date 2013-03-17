@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 /**
@@ -7,7 +7,7 @@ package twisted.rubber.ai.library;
  * 
  * This state-control class is separated from the Task class so the Decorators
  * have a chance at compile-time security.
- * @author Ying
+ * @author Moose
  *
  */
 public class ActionController 

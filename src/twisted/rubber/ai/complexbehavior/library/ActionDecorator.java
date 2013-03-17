@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 /**
@@ -7,7 +7,7 @@ package twisted.rubber.ai.library;
  * (Tough any method can be decorated in the base classes with no problem, 
  * they are decorated by default so the programmer does not forget)
  * 
- * @author Ying
+ * @author Moose
  *
  */
 public abstract class ActionDecorator extends Action 

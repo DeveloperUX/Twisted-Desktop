@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 /**
@@ -11,7 +11,7 @@ package twisted.rubber.ai.library;
  * candidate to update, and if it doesn't find it, it finishes with failure. 
  * If the child finishes with success, the Selector considers it's task done and 
  * bails with success. 
- * @author Ying
+ * @author Moose
  *
  */
 public class Selector extends ParentAction 

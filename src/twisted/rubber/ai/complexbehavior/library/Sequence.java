@@ -1,4 +1,4 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 
 /**
@@ -9,7 +9,7 @@ package twisted.rubber.ai.library;
  * When a child finishes with success, we select the next child as the update victim.
  * If we have finished updating the last child, the Sequence returns with success.
  * 
- * @author Ying
+ * @author Moose
  *
  */
 public class Sequence extends ParentAction 

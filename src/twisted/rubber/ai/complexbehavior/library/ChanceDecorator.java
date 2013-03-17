@@ -1,11 +1,11 @@
-package twisted.rubber.ai.library;
+package twisted.rubber.ai.complexbehavior.library;
 
 import java.util.Random;
 
 /**
  * Task decorator that adds a random chance
  * of being selected when checking the conditions
- * @author Ying
+ * @author Moose
  *
  */
 public class ChanceDecorator extends ActionDecorator 
