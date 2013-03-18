@@ -45,7 +45,7 @@ public abstract class Controller {
 	 * Sets the parent player
 	 * @param parent player we assign this input to
 	 */
-	public void SetParent(Vehicle parent) {
+	public void setParentOwner(Vehicle parent) {
 		this.parent = parent;
 	}
 	

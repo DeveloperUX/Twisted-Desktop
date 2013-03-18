@@ -1,7 +1,11 @@
 package com.biigoh.controls;
 
-import twisted.rubber.ai.complexbehavior.controller.AvoidObstacleAction;
+import twisted.rubber.ai.complexbehavior.controller.DodgeObstacleAction;
 import twisted.rubber.ai.complexbehavior.controller.BackAwayFromObstacleAction;
+import twisted.rubber.ai.complexbehavior.controller.DriveToPosition;
+import twisted.rubber.ai.complexbehavior.controller.IsCarAheadAction;
+import twisted.rubber.ai.complexbehavior.controller.IsWallAheadAction;
+import twisted.rubber.ai.complexbehavior.controller.RamCarAction;
 import twisted.rubber.ai.complexbehavior.library.Action;
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
 import twisted.rubber.ai.complexbehavior.library.ParentActionController;
@@ -25,18 +29,18 @@ public class AiComplexTree extends Controller {
 	 * Creates a new instance of the AIInputDevice
 	 * @param playScene Reference to the playScene
 	 */
-	public AiComplexTree() {		
+	public AiComplexTree(Vehicle aiCarToControl) {		
 		// Set AI the blackboard data.
-		blackboard = new Blackboard(this);	
+		blackboard = new Blackboard(aiCarToControl);	
 		CreateBehaviourTree();
 	}
 
 	/**
 	 * Sets the parent of the InputDevice.
 	 */
-	public void SetParent(Vehicle parent) {
-		super.SetParent(parent);
-		blackboard.player = parent;	
+	public void setParentOwner(Vehicle parent) {
+		super.setParentOwner(parent);
+		blackboard.carToControl = parent;	
 	}
 
 	/**
@@ -49,93 +53,44 @@ public class AiComplexTree extends Controller {
 
 	/**
 	 * Creates the behavior tree and populates the node hierarchy
+	 * ORDER MATTERS!!!
 	 */
 	private void CreateBehaviourTree() {
 		// Planner
 		this.rootPlanner = new Selector(blackboard, "Planner");
 		this.rootPlanner = new ResetDecorator(blackboard, this.rootPlanner, "Planner");
-		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
+//		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
 
 		// Maneuvering between obstacles
 		Action maneuver = new Selector(blackboard, "Maneuver");
 		
-		// Avoid Obstacle
-		Action avoidObstacle = new Sequence(blackboard, "Avoid Obstacle Sequence");
-		((ParentActionController) avoidObstacle.GetControl()).Add(new AvoidObstacleAction(blackboard, "AvoidObstacle"));
+		// Avoid Wall actions
+		Action avoidWallSequence = new Sequence(blackboard, "Avoid Wall Sequence");
+		((ParentActionController) avoidWallSequence.GetControl()).Add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
+		((ParentActionController) avoidWallSequence.GetControl()).Add(new DodgeObstacleAction(blackboard, "Dodge Wall"));
 		
-		// Back away from Obstacle
-		Action backAway = new Sequence(blackboard, "Circle chase sequence");
-		((ParentActionController) backAway.GetControl()).Add(new BackAwayFromObstacleAction(blackboard, "BackAwayFromObstacle"));
+		// Ram Car actions
+		Action ramCarSequence = new Sequence(blackboard, "Ram Car Sequence");		
+		((ParentActionController) ramCarSequence.GetControl()).Add(new IsCarAheadAction(blackboard, "Car Ahead?"));
+		((ParentActionController) ramCarSequence.GetControl()).Add(new RamCarAction(blackboard, "Ram Car"));
 		
-		// Add maneuvering behaviors to Maneuver
-		((ParentActionController) maneuver.GetControl()).Add(avoidObstacle);
-		((ParentActionController) maneuver.GetControl()).Add(backAway);
+		// Add Maneuvering sequences to Selector
+		((ParentActionController) maneuver.GetControl()).Add( avoidWallSequence );
+		((ParentActionController) maneuver.GetControl()).Add( ramCarSequence );
+//		((ParentActionController) maneuver.GetControl()).Add(new BackAwayFromObstacleAction(blackboard, "Back Up"));
+		
+		// Chase sequence
+		Action chaseSequence = new Sequence(blackboard, "Chase");
+		((ParentActionController) chaseSequence.GetControl()).Add(new DriveToPosition(blackboard, "Drive To Position"));
 		
 		// Add to planner
 		((ParentActionController) rootPlanner.GetControl()).Add(maneuver);
+		((ParentActionController) rootPlanner.GetControl()).Add(chaseSequence);
 		
 		// Chase enemy vehicle
 //		Action chaseEnemy = new Sequence(blackboard, "Circle chase sequence");
 //		((ParentActionController) chaseEnemy.GetControl()).Add(new ChaseEnemyAction(blackboard, "BackAwayFromObstacle"));
-		
-		
-		
-		
-		/*
-		// Attack
-		Action attack = new Selector(blackboard, "Attack");
 				
-		/// Circle Chase Attack
-		Action circleChase = new Sequence(blackboard, "Circle chase sequence");
-		circleChase = new ChanceDecorator(blackboard, circleChase, "Circle chase sequence", 60);
-		((ParentActionController)circleChase.GetControl()).Add(new GetClosestEnemyCursorTask(blackboard, "GetClosestEnemyCursor"));
-		((ParentActionController)circleChase.GetControl()).Add(new CalculateCirclePathTask(blackboard, "CalculateCirclePathTask"));
-		Action circleChasePathSequence = new Sequence(blackboard, "Follow next tile sequence");
-		circleChasePathSequence = new IteratePathDecorator(blackboard, circleChasePathSequence, "Follow next tile sequence");
-		((ParentActionController)circleChasePathSequence.GetControl()).Add(new SetPathTileAsDestination(blackboard, "SetPathTileAsDestination"));
-		((ParentActionController)circleChasePathSequence.GetControl()).Add(new MoveToDestinationTask(blackboard, "MoveToDestination"));
-		((ParentActionController)circleChasePathSequence.GetControl()).Add(new WaitTillNearDestinationTask(blackboard, "WaitTillNearDestination"));
-		((ParentActionController)circleChase.GetControl()).Add(circleChasePathSequence);
-		
-		/// Straight Chase Attack
-		Action straightChase = new Sequence(blackboard, "Chase sequence");
-		((ParentActionController)straightChase.GetControl()).Add(new GetClosestEnemyCursorTask(blackboard, "GetClosestEnemyCursor"));
-		((ParentActionController)straightChase.GetControl()).Add(new SetEnemyCursorAsDestinationTask(blackboard, "SetEnemyCursorAsDestination"));
-		((ParentActionController)straightChase.GetControl()).Add(new MoveToDestinationTask(blackboard, "MoveToDestination"));
-		((ParentActionController)straightChase.GetControl()).Add(new WaitTillNearDestinationTask(blackboard, "WaitTillNearDestination"));
-		
-		// Add to attack
-		((ParentActionController)attack.GetControl()).Add(circleChase);
-		((ParentActionController)attack.GetControl()).Add(straightChase);
-		
-		// Defend
-		Action defend = new Selector(blackboard, "Defend");
-		defend = new DefendDecorator(blackboard, defend, "Defend");
-		
-		/// Circle Flee Defend
-		Action circleFlee = new Sequence(blackboard, "Circle flee sequence");
-		((ParentActionController)circleFlee.GetControl()).Add(new CalculateFleePathTask(blackboard, "CalculateFleePath"));
-		Action circleFleePathSequence = new Sequence(blackboard, "Flee chase sequence");
-		circleFleePathSequence = new IteratePathDecorator(blackboard, circleFleePathSequence, "Flee chase sequence");
-		((ParentActionController)circleFleePathSequence.GetControl()).Add(new SetPathTileAsDestination(blackboard, "SetPathTileAsDestination"));
-		((ParentActionController)circleFleePathSequence.GetControl()).Add(new MoveToDestinationTask(blackboard, "MoveToDestination"));
-		((ParentActionController)circleFleePathSequence.GetControl()).Add(new WaitTillNearDestinationTask(blackboard, "WaitTillNearDestination"));
-		((ParentActionController)circleFlee.GetControl()).Add(circleFleePathSequence);
-		
-		/// Straight Flee Defend
-		Action straightFlee = new Sequence(blackboard, "Straight flee sequence");		
-		((ParentActionController)straightFlee.GetControl()).Add(new CalculateFleeDestinationTask(blackboard, "CalculateFleeDestination"));
-		((ParentActionController)straightFlee.GetControl()).Add(new MoveToDestinationTask(blackboard, "MoveToDestination"));
-		((ParentActionController)straightFlee.GetControl()).Add(new WaitTillNearDestinationTask(blackboard, "WaitTillNearDestination"));
-		
-		// Add to defend
-		((ParentActionController)defend.GetControl()).Add(circleFlee);
-		((ParentActionController)defend.GetControl()).Add(straightFlee);
-		
-		// Add to planner
-		((ParentActionController)this.planner.GetControl()).Add(defend);
-		((ParentActionController)this.planner.GetControl()).Add(attack);
-		*/
 	}
 	
 	

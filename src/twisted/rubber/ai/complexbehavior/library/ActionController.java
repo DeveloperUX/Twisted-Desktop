@@ -10,8 +10,7 @@ package twisted.rubber.ai.complexbehavior.library;
  * @author Moose
  *
  */
-public class ActionController 
-{
+public class ActionController {
 	/**
 	 * Indicates whether the task is finished or not
 	 */
@@ -36,8 +35,7 @@ public class ActionController
 	 * Creates a new instance of the TaskController class
 	 * @param task Task to controll.
 	 */
-	public ActionController(Action task)
-	{
+	public ActionController(Action task) {
 		SetTask(task);
 		Initialize();
 	}
@@ -45,8 +43,7 @@ public class ActionController
 	/**
 	 * Initializes the class data
 	 */
-	private void Initialize()
-	{
+	private void Initialize() {
 		this.done = false;
 		this.sucess = true;
 		this.started = false;
@@ -56,16 +53,14 @@ public class ActionController
 	 * Sets the task reference
 	 * @param task Task to monitor
 	 */
-	public void SetTask(Action task)
-	{
+	public void SetTask(Action task) {
 		this.task = task;
 	}
 	
 	/**
 	 * Starts the monitored class
 	 */
-	public void SafeStart()
-	{
+	public void SafeStart()	{
 		this.started = true;
 		task.Start();
 	}
@@ -73,8 +68,7 @@ public class ActionController
 	/**
 	 * Ends the monitored task
 	 */
-	public void SafeEnd()
-	{
+	public void SafeEnd() {
 		this.done = false;
 		this.started = false;
 		task.End();
@@ -83,8 +77,7 @@ public class ActionController
 	/**
 	 * Ends the monitored class, with success
 	 */
-	protected void FinishWithSuccess()
-	{
+	public void FinishWithSuccess() {
 		this.sucess = true;
 		this.done = true;
 		task.LogTask("Finished with success");
@@ -93,8 +86,7 @@ public class ActionController
 	/**
 	 * Ends the monitored class, with failure
 	 */
-	protected void FinishWithFailure()
-	{
+	public void FinishWithFailure() {
 		this.sucess = false;
 		this.done = true;
 		task.LogTask("Finished with failure");
@@ -104,8 +96,7 @@ public class ActionController
 	 * Indicates whether the task finished successfully
 	 * @return True if it did, false if it didn't
 	 */
-	public boolean Succeeded() 
-	{
+	public boolean Succeeded() {
 		return this.sucess;
 	}
 	
@@ -113,8 +104,7 @@ public class ActionController
 	 * Indicates whether the task finished with failure
 	 * @return True if it did, false if it didn't
 	 */
-	public boolean Failed()
-	{
+	public boolean Failed()	{
 		return !this.sucess;
 	}
 	
@@ -122,8 +112,7 @@ public class ActionController
 	 * Indicates whether the task finished
 	 * @return True if it did, false if it didn't
 	 */
-	public boolean Finished() 
-	{
+	public boolean Finished() {
 		return this.done;
 	}
 	
@@ -131,16 +120,14 @@ public class ActionController
 	 * Indicates whether the class has started or not
 	 * @return True if it has, false if it hasn't
 	 */
-	public boolean Started()
-	{
+	public boolean Started() {
 		return this.started;
 	}
 	
 	/**
 	 * Marks the class as just started.
 	 */
-	public void Reset()
-	{
+	public void Reset()	{
 		this.done = false;
 	}
 }

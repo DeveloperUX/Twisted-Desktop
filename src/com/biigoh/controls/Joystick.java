@@ -12,7 +12,7 @@ import com.biigoh.utils.Vector2Pool;
 
 public class Joystick extends Actor {
 
-	public final boolean DEBUG = true;
+	public final boolean DEBUG = false;
 	public final String LOG = "@ " + Joystick.class.getSimpleName();
 	
 	private boolean dpadActive = true;

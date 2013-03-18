@@ -49,6 +49,11 @@ public class MathMan extends MathUtils {
 	 * @return
 	 */
 	public static float aScaleValue( float value, float minValue, float maxValue, float minRange, float maxRange ) {
+		// Constrain the incoming value to make sure it's not less than or greater than the min and max values
+		if( value > maxValue )
+			value = maxValue;
+		if( value < minValue )
+			value = minValue;
 		return ( value / (( maxValue - minValue) / (maxRange - minRange))) + minRange;
 	}
 	

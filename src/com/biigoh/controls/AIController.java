@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.biigoh.gameObjects.vehicles.Vehicle;
 import com.biigoh.gameObjects.weaponry.MachineGunRound;
+import com.biigoh.screens.BattleScreen;
 import com.biigoh.utils.MathMan;
 import com.biigoh.utils.Physics;
 import com.biigoh.utils.Vector2Pool;
@@ -19,7 +20,7 @@ public class AIController extends Controller {
 
 	private static final String LOG = "@ " + AIController.class.getSimpleName();
 	private static final Boolean DEBUG_AI = false;
-	
+		
 	private Vehicle mCarToControl;
 	private Vehicle mTarget;	// Closest car
 	private AIState mState;

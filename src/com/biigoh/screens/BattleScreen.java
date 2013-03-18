@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -64,7 +65,7 @@ public class BattleScreen extends AbstractScreen {
 	private static final boolean DEBUG_POSITIONS = false;
 	public static final boolean DEBUG = false;
 
-	public static final int ENEMY_NUM = 3;
+	public static final int ENEMY_NUM = 1;
 	public final String LOG = "@ " + BattleScreen.class.getSimpleName();
 		
 	private static World world;	// Physics World representation of game
@@ -88,6 +89,10 @@ public class BattleScreen extends AbstractScreen {
 	private OrthographicCamera cameraMiniMap;
 
 	private SpriteBatch batchMiniMap;
+
+	private Box2DDebugRenderer debugRenderer;
+
+	private OrthographicCamera debugCam;
 	
 	public BattleScreen(TwistedRubber game) {
 		super(game);
@@ -140,6 +145,7 @@ public class BattleScreen extends AbstractScreen {
 		////////////////////////////////////////////////////////////
 		// create our super hero, and place him somewhere using meters and give him a name
 		heroMustang = new Mustang( 24, 18, 0 );
+		heroMustang.setID(Consts.HERO_ID);
 
 		//////////////////////////////////////////////////////////
 		// create the joystick and add it to the screen at the given position
@@ -178,6 +184,7 @@ public class BattleScreen extends AbstractScreen {
 		// ---------- Add the controls to the cars --------------- //		
 		heroMustang.setController( new HumanController(joyStick, fireButton, switchButton) );
 		battleArena.addVehicle(heroMustang);
+		
 		// ----------- Add all the Cars to the Stage ------------- //		
 
 		// add our little guys to the Scene, or Stage
@@ -241,6 +248,10 @@ public class BattleScreen extends AbstractScreen {
 	    
 	    gameStarted = false;
 	    gameEnded = false;
+	    
+	 // The Box2D Debug Renderer will handle rendering all physics objects for debugging
+	    debugRenderer = new Box2DDebugRenderer( true, true, true, true );
+	    debugCam = new OrthographicCamera( 24, 16 );
 
 		// Setup our Tween Engine
 //		Tween.registerAccessor(ChaseCamera.class, new ChaseCameraAccessor());		
@@ -287,7 +298,10 @@ public class BattleScreen extends AbstractScreen {
 			}
 			 
 //			enemy.setController( new AIController(enemy) );
-			enemy.setController( new AiComplexTree() );
+			AiComplexTree behaviorTree = new AiComplexTree( enemy );
+			behaviorTree.setParentOwner(enemy);
+			
+			enemy.setController( behaviorTree );			
 			enemy.getController().Start();
 						
 			battleArena.addVehicle( enemy );	
@@ -347,6 +361,10 @@ public class BattleScreen extends AbstractScreen {
 	@Override
 	public void render(float delta) {
 		debugStr = "FPS: " + Gdx.graphics.getFramesPerSecond() + "\n";
+		debugStr += "MPH Speed: " + MathMan.aRound(mph, 1) + " mph \n";
+//		debugStr += "Actual Speed: " + MathMan.aRound(heroMustang.currentSpeed, 1) + " SomeUnit \n";
+		debugStr += "Hero Health: " + heroMustang.getArmor() + "\n";
+		debugStr += "AI State :: " + debugCurAiState;
 		
 		//time before we update and render
 		timeBeforeUpdate = System.currentTimeMillis();
@@ -431,6 +449,11 @@ public class BattleScreen extends AbstractScreen {
 			hudStage.act( delta );			
 			// update the game world
 			battleArena.update();
+			
+
+		    // Again update the Camera matrices and call the debug renderer
+		    debugCam.unproject( battleStage.getCamera().position );
+		    debugRenderer.render( world, debugCam.combined );
 
 			score = heroMustang.getScore();
 			
@@ -497,9 +520,6 @@ public class BattleScreen extends AbstractScreen {
 		chaseCam.update();
 		
 		calculateSpeed( heroMustang, delta );		
-		debugStr += "MPH Speed: " + MathMan.aRound(mph, 1) + " mph \n";
-//		debugStr += "Actual Speed: " + MathMan.aRound(heroMustang.currentSpeed, 1) + " SomeUnit \n";
-		debugStr += "Hero Health: " + heroMustang.getArmor() + "\n";
 		
 		hudStage.getSpriteBatch().begin();
 			debugBox.draw( hudStage.getSpriteBatch() );
@@ -510,6 +530,7 @@ public class BattleScreen extends AbstractScreen {
 	}
 	
 	public static String debugStr = "";
+	public static String debugCurAiState = "";
 	
 	float lastClockedTime = 0;
 	Vector2 changeInPosition;

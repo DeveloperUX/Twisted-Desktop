@@ -1,5 +1,7 @@
 package twisted.rubber.ai.complexbehavior.library;
 
+import com.biigoh.screens.BattleScreen;
+
 
 /**
  * Leaf task (or node) in the behavior tree.
@@ -12,19 +14,16 @@ package twisted.rubber.ai.complexbehavior.library;
  * @author Moose
  *
  */
-public abstract class LeafAction extends Action 
-{
-	/**
-	 * Task controler to keep track of the Task state.
-	 */
+public abstract class LeafAction extends Action {
+	
+	/** Task controler to keep track of the Task state */
 	protected ActionController control;
 
 	/**
 	 * Creates a new instance of the LeafTask class
 	 * @param blackboard Reference to the AI Blackboard data
 	 */
-	public LeafAction(Blackboard blackboard) 
-	{
+	public LeafAction(Blackboard blackboard) {
 		super(blackboard);
 		CreateController();
 	}
@@ -34,26 +33,28 @@ public abstract class LeafAction extends Action
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param name Name of the class for debugging
 	 */
-	public LeafAction(Blackboard blackboard, String name) 
-	{
+	public LeafAction(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		CreateController();
 	}
 	
-	/**
-	 * Creates the controller for the class
-	 */
-	private void CreateController()
-	{
+	/** Creates the controller for the class */
+	private void CreateController() {
 		this.control = new ActionController(this);
 	}
 	
-	/**
-	 * Gets the controller reference.
-	 */
+	/** Gets the controller reference */
 	@Override
-	public ActionController GetControl()
-	{
+	public ActionController GetControl() {
 		return this.control;
+	}
+
+	/**
+	 * Logs the current Action to the Screen.
+	 * @param text Message to display
+	 */
+	public void DebugAction() {
+//		BattleScreen.debugStr += "AI State :: " + name + "\n";
+		BattleScreen.debugCurAiState = name;		
 	}
 }

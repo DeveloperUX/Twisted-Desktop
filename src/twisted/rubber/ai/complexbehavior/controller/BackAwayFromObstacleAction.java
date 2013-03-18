@@ -26,25 +26,25 @@ public class BackAwayFromObstacleAction extends LeafAction {
 
 	@Override
 	public boolean CheckConditions() {
-		LogTask("Back up :: Checking conditions");
+		LogTask("Checking conditions");
 		return true;
 	}
 
 	@Override
 	public void Start() {
-		LogTask("Back up :: Starting");
+		LogTask("Starting");
 	}
 
 	@Override
 	public void End() {
-		LogTask("Back up :: Ending");
+		LogTask("Ending");
 	}
 
 	@Override
 	public void DoAction() {
 		LogTask("Back up :: Doing Action");
-		bb.controls.joystickAngle += MathMan.radiansToDegrees * 10;
-		bb.controls.joystickStrength -= 0.1;
+		bb.getAiControls().joystickAngle += MathMan.radiansToDegrees * 10;
+		bb.getAiControls().joystickStrength -= 0.1;
 	}
 
 }
