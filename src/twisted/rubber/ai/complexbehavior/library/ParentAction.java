@@ -78,9 +78,8 @@ public abstract class ParentAction extends Action
 	 * measures in each case
 	 */
 	@Override
-	public void DoAction() 
-	{
-		LogTask("Doing action");
+	public void DoAction() {
+//		LogTask("Doing action");
 		if(control.Finished())
 		{
 			return;

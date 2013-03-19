@@ -25,6 +25,9 @@ import com.biigoh.utils.MathMan;
 
 public class ChaseCamera extends OrthographicCamera {
 	
+	private static final boolean DEBUG_RAYS = true;
+	private static final boolean DEBUG_FORCES = false;
+	
 	private final String LOG = ChaseCamera.class.getSimpleName();
 	private final boolean DEBUG = false;	
 	private boolean debugPhysics = true;
@@ -126,18 +129,17 @@ public class ChaseCamera extends OrthographicCamera {
 			}
 			
 		}
-
-//		float lerp = 0.1f;
-//		position.x += (carToChase.getPosition().x - position.x) * lerp * Consts.P2M_RATIO;
-//		position.y += (carToChase.getPosition().y - position.y) * lerp * Consts.P2M_RATIO;
 		
 		// update the camera's zoom depending on the speed of the car
-		updateZoom(carToChase.currentSpeed);
+//		updateZoom(carToChase.currentSpeed);
 		
 		// move the camera to the player's new position.
-		// ie: Make the camera chase the player around	
-//		position.set( carToChase.getPosition().x * Consts.P2M_RATIO, carToChase.getPosition().y * Consts.P2M_RATIO, 0 );
-		updatePosition(carToChase);
+		// ie: Make the camera chase the player around
+//		updatePosition(carToChase);
+		
+		
+		position.set( 0, 0, 0 );
+		zoom = 5;
 
 		if(DEBUG) Gdx.app.log( LOG, "update() :: Zoom level: " + zoom );
 		
@@ -182,18 +184,36 @@ public class ChaseCamera extends OrthographicCamera {
 			renderer.end();
 
 			renderer.begin( ShapeType.Line );
-				// Impulse Vector
-				renderer.setColor( Color.YELLOW );	
-				renderer.line( pos.x, pos.y, pos.x + car.curImpulse.x,  pos.y + car.curImpulse.y );
-				// Forward Velocity
-				renderer.setColor( Color.GREEN );
-				renderer.line( pos.x, pos.y, pos.x + car.curForward.x, pos.y + car.curForward.y );
-				// Lateral Velocity
-				renderer.setColor( Color.RED );		
-				renderer.line( pos.x, pos.y, pos.x + car.curLateral.x, pos.y + car.curLateral.y );
-				// Linear Velocity
-				renderer.setColor( Color.BLACK );	
-				renderer.line( pos.x, pos.y, pos.x + car.curLinear.x, pos.y + car.curLinear.y );
+				if( DEBUG_RAYS ) {
+					// Get the distance to look ahead of us depending on how fast we're moving
+					float distanceToLookAhead = MathMan.aScaleValue( car.currentSpeed, 0, 80, 10, 50 );
+					// Get a position vector from that distance
+					Vector2 pointAhead = MathMan.aPointFromDirection( car.getPosition(), car.getAngle(), distanceToLookAhead );
+					Vector2 rayLeft = MathMan.aPointFromDirection( car.getPosition(), car.getAngle() + (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
+					Vector2 rayRight = MathMan.aPointFromDirection( car.getPosition(), car.getAngle() - (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
+					
+					// Raycast Vector
+					renderer.setColor( Color.BLUE );
+					renderer.line( pos.x, pos.y, pointAhead.x, pointAhead.y );
+					renderer.setColor( Color.GREEN );
+					renderer.line( pos.x, pos.y, rayLeft.x, rayLeft.y );
+					renderer.setColor( Color.GREEN );
+					renderer.line( pos.x, pos.y, rayRight.x, rayRight.y );
+				}
+				if( DEBUG_FORCES ) {
+					// Impulse Vector
+					renderer.setColor( Color.ORANGE );	
+					renderer.line( pos.x, pos.y, pos.x + car.curImpulse.x,  pos.y + car.curImpulse.y );
+					// Forward Velocity
+					renderer.setColor( Color.GRAY );
+					renderer.line( pos.x, pos.y, pos.x + car.curForward.x, pos.y + car.curForward.y );
+					// Lateral Velocity
+					renderer.setColor( Color.DARK_GRAY );		
+					renderer.line( pos.x, pos.y, pos.x + car.curLateral.x, pos.y + car.curLateral.y );
+					// Linear Velocity
+					renderer.setColor( Color.BLACK );	
+					renderer.line( pos.x, pos.y, pos.x + car.curLinear.x, pos.y + car.curLinear.y );
+				}
 				// Special Debug Line for other temporary debug stuff
 				renderer.setColor( Color.WHITE );	
 				renderer.line( pos.x, pos.y, pos.x + car.debugLine.x, pos.y + car.debugLine.y );
@@ -201,12 +221,10 @@ public class ChaseCamera extends OrthographicCamera {
 			
 		}
 				
-		// update the Camera matrices and call the debug renderer	
-		
-		debugCam.position.set( carToChase.getPosition().x, carToChase.getPosition().y, 0 );
+		// update the Camera matrices and call the debug renderer
 		debugCam.update();		
-		debugRenderer.render( BattleScreen.getPhysicsWorld(), debugCam.combined );
-			
+		debugCam.position.set( carToChase.getPosition().x, carToChase.getPosition().y, 0 );
+		debugRenderer.render( BattleScreen.getPhysicsWorld(), debugCam.combined );			
 	}
 	
 	

@@ -47,6 +47,14 @@ public class Blackboard {
 	 */
 //	public Vector<Tile> path;
 	
+	public static enum Rays {
+		LEFT,
+		RIGHT,
+		FORWARD
+	}
+	
+	public Rays rayhit;
+	
 	
 
 	public int vehicleId;	

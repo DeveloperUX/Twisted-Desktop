@@ -18,6 +18,7 @@ import com.biigoh.launch.EntityData;
 import com.biigoh.screens.BattleScreen;
 import com.biigoh.utils.MathMan;
 import com.biigoh.utils.Physics;
+import com.biigoh.utils.Vector2Pool;
 
 public class DodgeObstacleAction extends LeafAction {
 	
@@ -65,17 +66,56 @@ public class DodgeObstacleAction extends LeafAction {
 	public void DoAction() {
 		DebugAction();
 		LogTask("Doing Action");
-		bb.getAiControls().joystickAngle += MathUtils.degreesToRadians * 20;	
-		if( bb.getAiControls().joystickStrength > 0.1 )
-			bb.getAiControls().joystickStrength -= 0.05;
+		// clear normals from list
+		normals.clear();
+		// Get the distance to look ahead of us depending on how fast we're moving
+		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 80, 10, 50 );
+		// Get a position vector from that distance
+		Vector2 pointAhead = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle(), distanceToLookAhead );
+		// A left and right wing vector 
+		Vector2 rayLeft = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle() + (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
+		Vector2 rayRight = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle() - (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
 		
-		GetControl().FinishWithSuccess();
+		// Forward Raycast callback
+		AIRaycastCallback forwardRayCallback = new AIRaycastCallback();
+		// Left Raycast callback
+		AIRaycastCallback leftRayCallback = new AIRaycastCallback();
+		// Right Raycast callback
+		AIRaycastCallback rightRayCallback = new AIRaycastCallback();
 		
-//		if( bb.getAiControls().joystickStrength < 0.4 )
-//			GetControl().FinishWithFailure();
+		// Create and run raycasts
+		BattleScreen.getPhysicsWorld().rayCast( forwardRayCallback, bb.carToControl.getPosition(), pointAhead );
+		BattleScreen.getPhysicsWorld().rayCast( leftRayCallback, bb.carToControl.getPosition(), rayLeft );
+		BattleScreen.getPhysicsWorld().rayCast( rightRayCallback, bb.carToControl.getPosition(), rayRight );
+		// Check which raycasts were hit
+		boolean isForwardRayHit = obstacleAhead(forwardRayCallback);
+		boolean isLeftRayHit = obstacleAhead(leftRayCallback);
+		boolean isRightRayHit = obstacleAhead(rightRayCallback);
 		
-
+		Vector2 curForward = bb.carToControl.getBody().getLinearVelocity().nor().cpy();		
+		for( Vector2 vector : normals )
+			curForward.add(vector);
 		
+//		if( isLeftRayHit || isRightRayHit || isForwardRayHit )
+//			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), curForward.nor() );
+		// Steer to the left
+		if( isLeftRayHit && isRightRayHit ) 
+			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(45) );			 
+		// Steer right
+		else if( isLeftRayHit )
+			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(-45) );		
+		// Steer left
+		else if( isRightRayHit )
+			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(45) );		
+		// Slow down and steer left
+		else if( isForwardRayHit ) {
+			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(45) );
+			bb.carToControl.getController().joystickStrength = 0.6f;
+		}
+		// No ray is hit so we are clear
+		else
+			GetControl().FinishWithSuccess();
+			
 		
 		
 		
@@ -128,6 +168,20 @@ public class DodgeObstacleAction extends LeafAction {
 //					left = false; right = false; front = false;
 //				}
 //		}
+	}
+	
+	Vector2 obstacleNormal = new Vector2(0,0);
+	List<Vector2> normals = new ArrayList<Vector2>();
+
+	private boolean obstacleAhead( AIRaycastCallback callback ) {		
+		if( callback.fixture != null ) {
+			EntityData ed = (EntityData) callback.fixture.getBody().getUserData();						
+			if( ed.getType() == EntityData.Type.WALL ) {
+				normals.add( callback.normal );
+				return true;
+			}
+		}			
+		return false;
 	}
 
 }

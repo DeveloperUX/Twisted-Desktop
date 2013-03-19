@@ -59,33 +59,33 @@ public class AiComplexTree extends Controller {
 		// Planner
 		this.rootPlanner = new Selector(blackboard, "Planner");
 		this.rootPlanner = new ResetDecorator(blackboard, this.rootPlanner, "Planner");
-		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
+//		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
 
 		// Maneuvering between obstacles
 		Action maneuver = new Selector(blackboard, "Maneuver");
 		
 		// Avoid Wall actions
-		Action avoidWallSequence = new Sequence(blackboard, "Avoid Wall Sequence");
-		((ParentActionController) avoidWallSequence.GetControl()).add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
-		((ParentActionController) avoidWallSequence.GetControl()).add(new DodgeObstacleAction(blackboard, "Dodge Wall"));
+		Action avoidanceSequence = new Sequence(blackboard, "Avoidance");
+		((ParentActionController) avoidanceSequence.GetControl()).add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
+		((ParentActionController) avoidanceSequence.GetControl()).add(new DodgeObstacleAction(blackboard, "Dodge Wall"));
 		
 		// Ram Car actions
-		Action ramCarSequence = new Sequence(blackboard, "Ram Car Sequence");		
-		((ParentActionController) ramCarSequence.GetControl()).add(new IsCarAheadAction(blackboard, "Car Ahead?"));
-		((ParentActionController) ramCarSequence.GetControl()).add(new RamCarAction(blackboard, "Ram Car"));
+		Action meleeSequence = new Sequence(blackboard, "Melee");		
+		((ParentActionController) meleeSequence.GetControl()).add(new IsCarAheadAction(blackboard, "Car Ahead?"));
+		((ParentActionController) meleeSequence.GetControl()).add(new RamCarAction(blackboard, "Ram Car"));
 		
 		// Add Maneuvering sequences to Selector
-		((ParentActionController) maneuver.GetControl()).add( avoidWallSequence );
-		((ParentActionController) maneuver.GetControl()).add( ramCarSequence );
+		((ParentActionController) maneuver.GetControl()).add( avoidanceSequence );
+		((ParentActionController) maneuver.GetControl()).add( meleeSequence );
 //		((ParentActionController) maneuver.GetControl()).Add(new BackAwayFromObstacleAction(blackboard, "Back Up"));
 		
 		// Chase sequence
-		Action chaseSequence = new Sequence(blackboard, "Chase");
-		((ParentActionController) chaseSequence.GetControl()).add(new MoveInDirection(blackboard, "Drive To Position"));
+		Action combatSequence = new Sequence(blackboard, "Combat");
+		((ParentActionController) combatSequence.GetControl()).add(new MoveInDirection(blackboard, "Move In Direction"));
 		
 		// Add to planner
 		((ParentActionController) rootPlanner.GetControl()).add(maneuver);
-		((ParentActionController) rootPlanner.GetControl()).add(chaseSequence);
+		((ParentActionController) rootPlanner.GetControl()).add(combatSequence);
 		
 		// Chase enemy vehicle
 //		Action chaseEnemy = new Sequence(blackboard, "Circle chase sequence");

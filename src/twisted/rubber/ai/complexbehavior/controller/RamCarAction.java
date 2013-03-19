@@ -46,7 +46,7 @@ public class RamCarAction extends LeafAction {
 		timeDiff = System.currentTimeMillis() - timeBeforeUpdate;
 		elapsedTime += timeDiff;
 		
-		if( elapsedTime > 600 ) {
+		if( elapsedTime > 10 ) {
 			elapsedTime = 0;
 			GetControl().FinishWithSuccess();
 		}
