@@ -14,14 +14,14 @@ import com.biigoh.utils.Vector2Pool;
  * Attempt to drive towards a set position,
  * specified in the {@link Blackboard} object
  */
-public class DriveToPosition extends LeafAction {
+public class MoveInDirection extends LeafAction {
 
-	public DriveToPosition(Blackboard blackboard) {
+	public MoveInDirection(Blackboard blackboard) {
 		super(blackboard);
 		// TODO Auto-generated constructor stub
 	}
 
-	public DriveToPosition(Blackboard blackboard, String name) {
+	public MoveInDirection(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		// TODO Auto-generated constructor stub
 	}
@@ -44,6 +44,18 @@ public class DriveToPosition extends LeafAction {
 
 	}
 
+	@Override
+	public void DoAction() {
+		float distance = bb.carToControl.getPosition().sub( bb.carToControl.getPosition() ).len();
+		float atSpeed = MathMan.aScaleValue( distance, 0, 40, 0.4f, 1 );
+		
+		bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenPoints( bb.carToControl.getPosition(), bb.closestEnemy.getPosition() );
+		bb.carToControl.getController().joystickStrength = atSpeed;
+		
+		GetControl().FinishWithSuccess();
+	}
+	
+	/*
 	@Override
 	public void DoAction() {
 		DebugAction();
@@ -83,5 +95,6 @@ public class DriveToPosition extends LeafAction {
 		
 		
 	}
+	*/
 
 }

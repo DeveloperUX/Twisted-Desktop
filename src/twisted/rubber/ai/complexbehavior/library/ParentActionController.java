@@ -37,7 +37,7 @@ public class ParentActionController extends ActionController
 	 * Adds a new subtask to the end of the subtask list.
 	 * @param task Task to add
 	 */
-	public void Add(Action task)
+	public void add(Action task)
 	{
 		subtasks.add(task);
 	}

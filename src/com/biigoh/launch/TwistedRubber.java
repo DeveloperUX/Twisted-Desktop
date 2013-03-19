@@ -4,6 +4,8 @@ package com.biigoh.launch;
  *
  ******************************************************************************/
 
+import java.net.BindException;
+
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -65,11 +67,16 @@ public class TwistedRubber extends Game {
 		Gdx.input.setInputProcessor( inputMultiplexer );
 		
 		if( Gdx.app.getType() == ApplicationType.Desktop ) {
-			remote_1 = new RemoteInput( 9997 );
-			remote_2 = new RemoteInput( 9998 );
-			
-//			remote_1.setInputProcessor( inputMultiplexer );
-//			remote_2.setInputProcessor( inputMultiplexer );
+			for( int attempt = 0; attempt < 5; attempt++ ) {
+				try {
+					remote_1 = new RemoteInput( 9997 + attempt );
+					remote_2 = new RemoteInput( 9988 + attempt );		
+					break;
+				} catch( Exception bindException ) {
+					Gdx.app.log( LOG, "Exception Binding Remote at port: " + (9997 + attempt) );
+				}
+			}
+					
 		}	
 		
 		// load our tiled map
@@ -130,12 +137,12 @@ public class TwistedRubber extends Game {
 	public void setRemoteProcessor( InputProcessor processor ) {
 							
 		if( remote_1.getInputProcessor() == null ) {
-			System.out.println( "SETTING REMOTE 1" );		
+//			System.out.println( "SETTING REMOTE 1" );		
 			remote_1.setInputProcessor(processor);
 		}
 		
 		else {
-			System.out.println( "SETTING REMOTE 2" );
+//			System.out.println( "SETTING REMOTE 2" );
 			remote_2.setInputProcessor(processor);
 		}
 		

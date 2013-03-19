@@ -65,12 +65,14 @@ public class DodgeObstacleAction extends LeafAction {
 	public void DoAction() {
 		DebugAction();
 		LogTask("Doing Action");
-		bb.getAiControls().joystickAngle += MathUtils.degreesToRadians * 10;	
-		if( bb.getAiControls().joystickStrength > 0 )
+		bb.getAiControls().joystickAngle += MathUtils.degreesToRadians * 20;	
+		if( bb.getAiControls().joystickStrength > 0.1 )
 			bb.getAiControls().joystickStrength -= 0.05;
 		
-		if( bb.getAiControls().joystickStrength < 0.4 )
-			GetControl().FinishWithFailure();
+		GetControl().FinishWithSuccess();
+		
+//		if( bb.getAiControls().joystickStrength < 0.4 )
+//			GetControl().FinishWithFailure();
 		
 
 		

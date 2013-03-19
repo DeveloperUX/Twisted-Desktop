@@ -40,7 +40,7 @@ public class IsWallAheadAction extends LeafAction {
 		LogTask("Doing Action");
 		DebugAction();
 		// Get the distance to look ahead of us depending on how fast we're moving
-		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 200, 5, 10 );
+		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 200, 40, 60 );
 		// Get a position vector from that distance
 		Vector2 pointAhead = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle(), distanceToLookAhead );
 		// Forward Raycast callback

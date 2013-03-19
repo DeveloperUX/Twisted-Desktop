@@ -27,7 +27,7 @@ public class ChaseCamera extends OrthographicCamera {
 	
 	private final String LOG = ChaseCamera.class.getSimpleName();
 	private final boolean DEBUG = false;	
-	private boolean debugPhysics = false;
+	private boolean debugPhysics = true;
 	private boolean debugRaycasts = false;
 	
 	private BattleArena arena;
@@ -202,11 +202,11 @@ public class ChaseCamera extends OrthographicCamera {
 		}
 				
 		// update the Camera matrices and call the debug renderer	
-		debugCam.update();		
-		debugCam.position.set( carToChase.getPosition().x, carToChase.getPosition().y, 0 );
 		
+		debugCam.position.set( carToChase.getPosition().x, carToChase.getPosition().y, 0 );
+		debugCam.update();		
 		debugRenderer.render( BattleScreen.getPhysicsWorld(), debugCam.combined );
-	
+			
 	}
 	
 	
@@ -218,8 +218,8 @@ public class ChaseCamera extends OrthographicCamera {
 		Vector2 targetPosition = linearVelocity.mul( 1/linearVelocity.len() ).mul(distanceAhead * Consts.P2M_RATIO);
 		targetPosition = carToChase.getPosition().cpy().add(targetPosition);
 		
-//		position.set( carToChase.getPosition().x * Consts.P2M_RATIO * 1.2f, carToChase.getPosition().y * Consts.P2M_RATIO * 1.2f, 0 );
-		position.set( pointAhead.x * Consts.P2M_RATIO * 1.1f, pointAhead.y * Consts.P2M_RATIO * 1.1f, 0 );
+		position.set( carToChase.getPosition().x * Consts.P2M_RATIO * 1, carToChase.getPosition().y * Consts.P2M_RATIO * 1, 0 );
+//		position.set( pointAhead.x * Consts.P2M_RATIO * 1.1f, pointAhead.y * Consts.P2M_RATIO * 1.1f, 0 );
 		
 		if(DEBUG) Gdx.app.log( LOG, "updatePosition() :: Inertia: " + carToChase.getBody().getInertia() );
 		if(DEBUG) Gdx.app.log( LOG, "updatePosition() :: Distance Ahead: " + pointAhead );
@@ -231,8 +231,7 @@ public class ChaseCamera extends OrthographicCamera {
 	public void updateZoom( float carSpeed ) {		
 //		float curSpeed = MathMan.aRound( carToChase.currentSpeed, 0 );		
 		// TODO: Use CarToChase instead of carVel, and add functionality for Sniper Zoom Out
-//		zoom = MathMan.aScaleValue( carSpeed, 0, MAX_ZOOM, 1, 3) * 1.2f;
-		zoom = MathMan.aScaleValue( carSpeed, 0, MAX_ZOOM, 3, 4) * 1.2f;
+		zoom = MathMan.aScaleValue( carSpeed, 0, MAX_ZOOM, 3, 5) * 1.2f;
 		/*
 		if( carSpeed > lastCalculatedSpeed ) {
 			zoom = MathMan.aScaleValue( carSpeed, 0, MAX_ZOOM, 1.5f, 6) * 1.2f;

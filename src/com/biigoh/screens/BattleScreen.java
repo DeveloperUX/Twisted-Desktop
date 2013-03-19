@@ -89,17 +89,13 @@ public class BattleScreen extends AbstractScreen {
 	private OrthographicCamera cameraMiniMap;
 
 	private SpriteBatch batchMiniMap;
-
-	private Box2DDebugRenderer debugRenderer;
-
-	private OrthographicCamera debugCam;
 	
 	public BattleScreen(TwistedRubber game) {
 		super(game);
 		// adjust the physics world update speed depending on
 		// whether we're running on Mobile or Desktop
 		if( Gdx.app.getType() == ApplicationType.Desktop )
-			PHYSICS_SPEED = 70;
+			PHYSICS_SPEED = 60; // TODO (originally 90) 
 		else
 			PHYSICS_SPEED = 50;
 	}	
@@ -249,10 +245,6 @@ public class BattleScreen extends AbstractScreen {
 	    gameStarted = false;
 	    gameEnded = false;
 	    
-	 // The Box2D Debug Renderer will handle rendering all physics objects for debugging
-	    debugRenderer = new Box2DDebugRenderer( true, true, true, true );
-	    debugCam = new OrthographicCamera( 24, 16 );
-
 		// Setup our Tween Engine
 //		Tween.registerAccessor(ChaseCamera.class, new ChaseCameraAccessor());		
 		// Create a new Tween Manager to manage animations
@@ -385,7 +377,7 @@ public class BattleScreen extends AbstractScreen {
 		//time difference between before and after the update and render cycle
 		timeDiff = System.currentTimeMillis() - timeBeforeUpdate;
 		//check if we need to put the thread to sleep, or catch up
-//		fps.sleep(timeDiff, this, delta);		
+		fps.sleep(timeDiff, this, delta);		
 	}
 	
 
@@ -450,11 +442,6 @@ public class BattleScreen extends AbstractScreen {
 			// update the game world
 			battleArena.update();
 			
-
-		    // Again update the Camera matrices and call the debug renderer
-		    debugCam.unproject( battleStage.getCamera().position );
-		    debugRenderer.render( world, debugCam.combined );
-
 			score = heroMustang.getScore();
 			
 			if( heroMustang.getState() == EntityData.State.DEAD ) {
