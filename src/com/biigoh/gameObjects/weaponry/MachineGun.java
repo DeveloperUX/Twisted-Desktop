@@ -129,7 +129,8 @@ public class MachineGun extends Weapon {
 		if( carAttachedTo != null )
 			return;
 		
-		mSprite.setPosition( mBody.getPosition().x * Consts.P2M_RATIO, mBody.getPosition().y * Consts.P2M_RATIO );
+		mSprite.setPosition( mBody.getPosition().x * Consts.P2M_RATIO - mSprite.getWidth()/2, 
+				mBody.getPosition().y * Consts.P2M_RATIO - mSprite.getHeight()/2 );
 		mSprite.setRotation( mBody.getAngle() * MathMan.radiansToDegrees );
 		mSprite.draw( batch, parentAlpha );
 	}

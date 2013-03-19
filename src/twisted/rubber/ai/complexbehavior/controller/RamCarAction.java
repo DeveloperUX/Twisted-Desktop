@@ -37,16 +37,16 @@ public class RamCarAction extends LeafAction {
 	@Override
 	public void DoAction() {
 		DebugAction();
-		LogTask("Doing Action");
+		LogTask("Doing Action \n");
 		// time before we update
-		timeBeforeUpdate = System.currentTimeMillis();		
+//		timeBeforeUpdate = System.currentTimeMillis();		
 		// TODO Auto-generated method stub
-		bb.getAiControls().joystickStrength = 2;
+		bb.carToControl.getController().joystickStrength = 6;
 		// time difference between before and after the update and render cycle
-		timeDiff = System.currentTimeMillis() - timeBeforeUpdate;
-		elapsedTime += timeDiff;
+//		timeDiff = System.currentTimeMillis() - timeBeforeUpdate;
+		elapsedTime += 1;
 		
-		if( elapsedTime > 10 ) {
+		if( elapsedTime > 5 ) {
 			elapsedTime = 0;
 			GetControl().FinishWithSuccess();
 		}

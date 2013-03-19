@@ -53,7 +53,7 @@ public abstract class Action
 	 * @param text Message to display
 	 */
 	public void LogTask(String text) {
-		if(DEBUG) Gdx.app.log("Action", name + " - " + text + "... (Player:" + bb.vehicleId + ")");
+		if(DEBUG) Gdx.app.log("Action", name + " - " + text);
 	}
 	
 	/**

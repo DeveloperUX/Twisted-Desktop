@@ -168,6 +168,8 @@ public class ChaseCamera extends OrthographicCamera {
 		}
 	}
 	
+	public static Vector2 colLine = new Vector2(0,0);
+	
 	public void renderDebugging() {		
 //		debugCam.update();		
 		debugCam.zoom = zoom;		
@@ -199,6 +201,7 @@ public class ChaseCamera extends OrthographicCamera {
 					renderer.line( pos.x, pos.y, rayLeft.x, rayLeft.y );
 					renderer.setColor( Color.GREEN );
 					renderer.line( pos.x, pos.y, rayRight.x, rayRight.y );
+//					renderer.line( colLine.x, colLine.y, col
 				}
 				if( DEBUG_FORCES ) {
 					// Impulse Vector

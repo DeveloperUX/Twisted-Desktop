@@ -60,7 +60,7 @@ public class Sniper extends Weapon {
 		fd.isSensor = true;
 		
 		mBody = Physics.createBoxBody( BodyType.DynamicBody, fd, mSprite );		
-		mBody.setUserData( new EntityData( getID(), getOwnerID(), EntityData.Type.SNIPER ) );
+		mBody.setUserData( new EntityData( getID(), getOwnerID(), EntityData.Type.SNIPER ) );		
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class Sniper extends Weapon {
 		if( carAttachedTo != null )
 			return;
 		
-		mSprite.setPosition( mBody.getPosition().x * Consts.P2M_RATIO, mBody.getPosition().y * Consts.P2M_RATIO );
+		mSprite.setPosition( mBody.getPosition().x * Consts.P2M_RATIO - mSprite.getWidth()/2, mBody.getPosition().y * Consts.P2M_RATIO - mSprite.getHeight()/2 );
 		mSprite.setRotation( mBody.getAngle() * MathMan.radiansToDegrees );
 		mSprite.draw( batch, parentAlpha );
 	}

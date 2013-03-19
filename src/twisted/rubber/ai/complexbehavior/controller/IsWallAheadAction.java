@@ -60,18 +60,20 @@ public class IsWallAheadAction extends LeafAction {
 		BattleScreen.getPhysicsWorld().rayCast( leftRayCallback, bb.carToControl.getPosition(), rayLeft );
 		BattleScreen.getPhysicsWorld().rayCast( rightRayCallback, bb.carToControl.getPosition(), rayRight );
 		// Check which raycasts were hit
-		boolean isForwardRayHit = obstacleAhead(forwardRayCallback);
-		boolean isLeftRayHit = obstacleAhead(leftRayCallback);
-		boolean isRightRayHit = obstacleAhead(rightRayCallback);
+		bb.forwardRayHit = obstacleAhead(forwardRayCallback);
+		bb.leftRayHit = obstacleAhead(leftRayCallback);
+		bb.rightRayHit = obstacleAhead(rightRayCallback);
+		
 		// log which raycast was hit
-		if( isForwardRayHit )
-			bb.rayhit = Rays.FORWARD;
-		else if( isLeftRayHit )
-			bb.rayhit = Rays.LEFT;
-		else if( isRightRayHit )
-			bb.rayhit = Rays.RIGHT;
+//		if( isForwardRayHit )
+//			bb.rayhit = Rays.FORWARD;
+//		else if( isLeftRayHit )
+//			bb.rayhit = Rays.LEFT;
+//		else if( isRightRayHit )
+//			bb.rayhit = Rays.RIGHT;
+		
 		// If any raycast was hit finish with success
-		if( isForwardRayHit || isLeftRayHit || isRightRayHit )
+		if( bb.forwardRayHit || bb.leftRayHit || bb.rightRayHit )
 			GetControl().FinishWithSuccess();		
 		else
 			GetControl().FinishWithFailure();

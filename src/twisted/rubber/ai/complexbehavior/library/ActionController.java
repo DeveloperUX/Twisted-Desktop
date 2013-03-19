@@ -1,5 +1,7 @@
 package twisted.rubber.ai.complexbehavior.library;
 
+import twisted.rubber.ai.simplebehavior.library._Behavior.Status;
+
 
 /**
  * Class added by composition to any task, to keep track of the Task state
@@ -11,24 +13,27 @@ package twisted.rubber.ai.complexbehavior.library;
  *
  */
 public class ActionController {
-	/**
-	 * Indicates whether the task is finished or not
-	 */
+
+	// Possible return states for each behavior
+	protected Status mStatus;
+	
+	public static enum Status {
+		INVALID,
+		SUCCESS,
+		FAILURE,
+		RUNNING
+	}
+	
+	/** Indicates whether the task is finished or not */
 	private boolean done;
 	
-	/**
-	 * If finished, it indicates if it has finished with success or not
-	 */
-	private boolean sucess;
+	/** If finished, it indicates if it has finished with success or not */
+	private boolean success;
 	
-	/**
-	 * Indicates if the task has started or not
-	 */
+	/** Indicates if the task has started or not */
 	private boolean started;
 	
-	/**
-	 * Reference to the task we monitor
-	 */
+	/** Reference to the task we monitor */
 	private Action task;
 	
 	/**
@@ -40,12 +45,10 @@ public class ActionController {
 		Initialize();
 	}
 	
-	/**
-	 * Initializes the class data
-	 */
+	/** Initializes the class data */
 	private void Initialize() {
 		this.done = false;
-		this.sucess = true;
+		this.success = true;
 		this.started = false;
 	}
 	
@@ -57,39 +60,31 @@ public class ActionController {
 		this.task = task;
 	}
 	
-	/**
-	 * Starts the monitored class
-	 */
+	/** Starts the monitored class */
 	public void SafeStart()	{
 		this.started = true;
 		task.Start();
 	}
 	
-	/**
-	 * Ends the monitored task
-	 */
+	/** Ends the monitored task */
 	public void SafeEnd() {
 		this.done = false;
 		this.started = false;
 		task.End();
 	}
 	
-	/**
-	 * Ends the monitored class, with success
-	 */
+	/** Ends the monitored class, with success */
 	public void FinishWithSuccess() {
-		this.sucess = true;
+		this.success = true;
 		this.done = true;
-		task.LogTask("Finished with success");
+		task.LogTask("Finished with success \n");
 	}
 
-	/**
-	 * Ends the monitored class, with failure
-	 */
+	/** Ends the monitored class, with failure */
 	public void FinishWithFailure() {
-		this.sucess = false;
+		this.success = false;
 		this.done = true;
-		task.LogTask("Finished with failure");
+		task.LogTask("Finished with failure \n");
 	}
 	
 	/**
@@ -97,7 +92,7 @@ public class ActionController {
 	 * @return True if it did, false if it didn't
 	 */
 	public boolean Succeeded() {
-		return this.sucess;
+		return this.success;
 	}
 	
 	/**
@@ -105,7 +100,7 @@ public class ActionController {
 	 * @return True if it did, false if it didn't
 	 */
 	public boolean Failed()	{
-		return !this.sucess;
+		return !this.success;
 	}
 	
 	/**
@@ -124,9 +119,7 @@ public class ActionController {
 		return this.started;
 	}
 	
-	/**
-	 * Marks the class as just started.
-	 */
+	/** Marks the class as just started */
 	public void Reset()	{
 		this.done = false;
 	}

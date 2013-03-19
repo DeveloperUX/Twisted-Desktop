@@ -209,10 +209,10 @@ public class Assets {
 	//======================================
 	// Public interface for using resources
 	//=======================================
-	public static void playSound( Sound sound ) {
+	public static void playSound( Sound sound, float volume ) {
 		// TODO: Make a Map for Sound obj and name		
 		if (Settings.soundEnabled) 
-			sound.play( 1 );
+			sound.play( volume );
 	}
 	
 

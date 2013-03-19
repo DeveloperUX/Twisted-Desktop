@@ -46,10 +46,12 @@ public class MoveInDirection extends LeafAction {
 
 	@Override
 	public void DoAction() {
-		float distance = bb.carToControl.getPosition().sub( bb.carToControl.getPosition() ).len();
+		LogTask("Doing Action");
+		float distance = bb.carToControl.getPosition().sub( bb.closestEnemy.getPosition() ).len();
 		float atSpeed = MathMan.aScaleValue( distance, 0, 40, 0.4f, 1 );
-		
-		bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenPoints( bb.carToControl.getPosition(), bb.closestEnemy.getPosition() );
+		float angle = -MathMan.aAngleBetweenPoints( bb.carToControl.getPosition(), bb.closestEnemy.getPosition() );
+		angle = MathMan.aConvertToUsableAngle(angle);
+		bb.carToControl.getController().joystickAngle = angle;
 		bb.carToControl.getController().joystickStrength = atSpeed;
 		
 		GetControl().FinishWithSuccess();

@@ -17,34 +17,23 @@ import com.biigoh.view.BattleArena;
  *
  */
 public class Blackboard {
-	/**
-	 * Reference to the vector of players in the game
-	 */
+	
+	/** Reference to the vector of players in the game */
 	public static Collection<Vehicle> cars;
 	
-	/**
-	 * Reference to all game objects in the Arena
-	 */
+	/** Reference to all game objects in the Arena */
 	public static BattleArena arena;
 	
-	/**
-	 * Closest enemy vehicle
-	 */
+	/** Closest enemy vehicle */
 	public Vehicle closestEnemy;
 	
-	/**
-	 * Position to move towards
-	 */
+	/** Position to move towards */
 	public Vector2 moveLocation;
 	
-	/**
-	 * Destination point to arrive at
-	 */
+	/** Destination point to arrive at */
 //	public Vec2 destination;
 	
-	/**
-	 * Path of positions to move to
-	 */
+	/** Path of positions to move to */
 //	public Vector<Tile> path;
 	
 	public static enum Rays {
@@ -54,14 +43,18 @@ public class Blackboard {
 	}
 	
 	public Rays rayhit;
-	
+
+	public boolean forwardRayHit;
+	public boolean leftRayHit;
+	public boolean rightRayHit;
 	
 
 	public int vehicleId;	
 	public Vehicle carToControl;
 	
 	/**
-	 * Creates a new instance of the Blackboard class
+	 * Create a new shared Blackboard for storing and sharing information
+	 * @param aiCarToControl The AI Car that will be in charge of this Blackboard
 	 */
 	public Blackboard(Vehicle aiCarToControl) {
 		carToControl = aiCarToControl;
@@ -72,8 +65,12 @@ public class Blackboard {
 		// TODO :: Take this out
 		closestEnemy = arena.getHero();
 //		moveLocation = closestEnemy.getPosition();
+		forwardRayHit = false;
+		leftRayHit = false;
+		rightRayHit = false;
 	}
 	
+	// TODO Take this out, not used
 	public Controller getAiControls() {
 		return carToControl.getController();
 	}

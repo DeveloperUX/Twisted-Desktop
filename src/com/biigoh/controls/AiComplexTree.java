@@ -1,15 +1,15 @@
 package com.biigoh.controls;
 
-import twisted.rubber.ai.complexbehavior.controller.DodgeObstacleAction;
-import twisted.rubber.ai.complexbehavior.controller.BackAwayFromObstacleAction;
-import twisted.rubber.ai.complexbehavior.controller.MoveInDirection;
+import twisted.rubber.ai.complexbehavior.controller.DodgeWallAction;
 import twisted.rubber.ai.complexbehavior.controller.IsCarAheadAction;
 import twisted.rubber.ai.complexbehavior.controller.IsWallAheadAction;
+import twisted.rubber.ai.complexbehavior.controller.MoveInDirection;
 import twisted.rubber.ai.complexbehavior.controller.RamCarAction;
 import twisted.rubber.ai.complexbehavior.library.Action;
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
 import twisted.rubber.ai.complexbehavior.library.ParentActionController;
 import twisted.rubber.ai.complexbehavior.library.RegulatorDecorator;
+import twisted.rubber.ai.complexbehavior.library.RepeatDecorator;
 import twisted.rubber.ai.complexbehavior.library.ResetDecorator;
 import twisted.rubber.ai.complexbehavior.library.Selector;
 import twisted.rubber.ai.complexbehavior.library.Sequence;
@@ -66,8 +66,9 @@ public class AiComplexTree extends Controller {
 		
 		// Avoid Wall actions
 		Action avoidanceSequence = new Sequence(blackboard, "Avoidance");
+//		avoidanceSequence = new RepeatDecorator(blackboard, avoidanceSequence, "Avoid Wall Reset");
 		((ParentActionController) avoidanceSequence.GetControl()).add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
-		((ParentActionController) avoidanceSequence.GetControl()).add(new DodgeObstacleAction(blackboard, "Dodge Wall"));
+		((ParentActionController) avoidanceSequence.GetControl()).add(new DodgeWallAction(blackboard, "Dodge Wall"));
 		
 		// Ram Car actions
 		Action meleeSequence = new Sequence(blackboard, "Melee");		

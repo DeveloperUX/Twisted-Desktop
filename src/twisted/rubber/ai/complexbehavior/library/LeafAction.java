@@ -16,7 +16,7 @@ import com.biigoh.screens.BattleScreen;
  */
 public abstract class LeafAction extends Action {
 	
-	/** Task controler to keep track of the Task state */
+	/** Task controller to keep track of the Task state */
 	protected ActionController control;
 
 	/**

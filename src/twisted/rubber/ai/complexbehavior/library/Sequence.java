@@ -12,14 +12,12 @@ package twisted.rubber.ai.complexbehavior.library;
  * @author Moose
  *
  */
-public class Sequence extends ParentAction 
-{
+public class Sequence extends ParentAction {
 	/**
 	 * Creates a new instance of the Sequence class
 	 * @param blackboard Reference to the AI Blackboard data
 	 */
-	public Sequence(Blackboard blackboard)
-	{
+	public Sequence(Blackboard blackboard) {
 		super(blackboard);
 	}
 	
@@ -28,8 +26,7 @@ public class Sequence extends ParentAction
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param name Name of the class, used for debugging
 	 */
-	public Sequence(Blackboard blackboard, String name)
-	{
+	public Sequence(Blackboard blackboard, String name)	{
 		super(blackboard, name);
 	}
 
@@ -38,8 +35,7 @@ public class Sequence extends ParentAction
 	 * We failed to update the whole sequence. Bail with failure.
 	 */
 	@Override
-	public void ChildFailed() 
-	{
+	public void ChildFailed() {
 		control.FinishWithFailure();
 	}
 
@@ -48,20 +44,14 @@ public class Sequence extends ParentAction
 	 * Select the next one to update. If it's the last, we have finished with success.
 	 */
 	@Override
-	public void ChildSucceeded() 
-	{
+	public void ChildSucceeded() {
 		int curPos = control.subtasks.indexOf(control.curTask);
 		if( curPos == (control.subtasks.size() - 1))
-		{
-			control.FinishWithSuccess();
-		}
-		else
-		{
+			control.FinishWithSuccess();		
+		else {
 			control.curTask = control.subtasks.elementAt(curPos + 1);
 			if(!control.curTask.CheckConditions())
-			{
-				control.FinishWithFailure();
-			}
+				control.FinishWithFailure();			
 		}
 	}
 }

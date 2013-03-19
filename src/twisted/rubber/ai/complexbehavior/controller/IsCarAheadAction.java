@@ -37,10 +37,10 @@ public class IsCarAheadAction extends LeafAction {
 
 	@Override
 	public void DoAction() {
-		
+		LogTask("Doing Action");
 		DebugAction();
 		// Get the distance to look ahead of us depending on how fast we're moving
-		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 200, 6, 8 );
+		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 100, 10, 15 );
 		// Get a position vector from that distance
 		Vector2 pointAhead = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle(), distanceToLookAhead );
 		// Forward Raycast callback
