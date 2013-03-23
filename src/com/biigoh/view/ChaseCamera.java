@@ -26,7 +26,7 @@ import com.biigoh.utils.MathMan;
 public class ChaseCamera extends OrthographicCamera {
 	
 	private static final boolean DEBUG_RAYS = true;
-	private static final boolean DEBUG_FORCES = false;
+	private static final boolean DEBUG_FORCES = true;
 	
 	private final String LOG = ChaseCamera.class.getSimpleName();
 	private final boolean DEBUG = false;	
