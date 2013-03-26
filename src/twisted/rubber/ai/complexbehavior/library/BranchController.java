@@ -9,27 +9,27 @@ import java.util.Vector;
  * @author Moose
  *
  */
-public class ParentActionController extends ActionController 
+public class BranchController extends BehaviorController 
 {
 	/**
 	 * Vector of child Task
 	 */
-	public Vector<Action> subtasks;
+	public Vector<Task> subtasks;
 	
 	/**
 	 * Current updating task
 	 */
-	public Action curTask;
+	public Task curTask;
 
 	/**
 	 * Creates a new instance of the ParentTaskController class
 	 * @param task
 	 */
-	public ParentActionController(Action task) 
+	public BranchController(Task task) 
 	{
 		super(task);
 		
-		this.subtasks = new Vector<Action>();
+		this.subtasks = new Vector<Task>();
 		this.curTask = null;
 	}
 	
@@ -37,7 +37,7 @@ public class ParentActionController extends ActionController
 	 * Adds a new subtask to the end of the subtask list.
 	 * @param task Task to add
 	 */
-	public void add(Action task)
+	public void add(Task task)
 	{
 		subtasks.add(task);
 	}

@@ -16,7 +16,7 @@ public class ResetDecorator extends ActionDecorator
 	 * @param task Task to decorate
 	 * @param name Name of the class, used for debugging
 	 */
-	public ResetDecorator(Blackboard blackboard, Action task, String name) 
+	public ResetDecorator(Blackboard blackboard, Task task, String name) 
 	{
 		super(blackboard, task, name);
 	}
@@ -26,7 +26,7 @@ public class ResetDecorator extends ActionDecorator
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param task Task to decorate
 	 */
-	public ResetDecorator(Blackboard blackboard, Action task) 
+	public ResetDecorator(Blackboard blackboard, Task task) 
 	{
 		super(blackboard, task);
 	}
@@ -38,7 +38,7 @@ public class ResetDecorator extends ActionDecorator
 	public void DoAction() 
 	{
 		this.task.DoAction();
-		if(this.task.GetControl().Finished())
+		if(this.task.GetControl().isFinished())
 		{
 			this.task.GetControl().Reset();
 		}

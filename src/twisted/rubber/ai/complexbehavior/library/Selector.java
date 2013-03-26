@@ -14,7 +14,7 @@ package twisted.rubber.ai.complexbehavior.library;
  * @author Moose
  *
  */
-public class Selector extends ParentAction 
+public class Selector extends Branch 
 {
 	/**
 	 * Creates a new instance of the Selector class
@@ -39,9 +39,9 @@ public class Selector extends ParentAction
 	 * Chooses the new task to update.
 	 * @return The new task, or null if none was found
 	 */
-	public Action ChooseNewTask()
+	public Task ChooseNewTask()
 	{
-		Action task = null;
+		Task task = null;
 		boolean found = false;
 		int curPos = control.subtasks.indexOf(control.curTask);
 		

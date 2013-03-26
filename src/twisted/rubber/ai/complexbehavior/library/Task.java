@@ -20,7 +20,7 @@ import com.badlogic.gdx.Gdx;
  * @author Moose
  *
  */
-public abstract class Action 
+public abstract class Task 
 {	
 	protected static final boolean DEBUG = true;
 
@@ -34,7 +34,7 @@ public abstract class Action
 	 * Creates a new instance of the Task class
 	 * @param blackboard Reference to the AI Blackboard data
 	 */
-	public Action(Blackboard blackboard) {
+	public Task(Blackboard blackboard) {
 		this.bb = blackboard;
 	}
 	
@@ -43,7 +43,7 @@ public abstract class Action
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param name Name of the class, used for debugging
 	 */
-	public Action(Blackboard blackboard, String name) {
+	public Task(Blackboard blackboard, String name) {
 		this.name = name;
 		this.bb = blackboard;
 	}
@@ -75,5 +75,5 @@ public abstract class Action
 	 * Override to specify the controller the task has
 	 * @return The specific task controller.
 	 */
-	public abstract ActionController GetControl();
+	public abstract BehaviorController GetControl();
 }

@@ -21,7 +21,7 @@ public class ChanceDecorator extends ActionDecorator
 	 */
 	Random rand;
 
-	public ChanceDecorator(Blackboard blackboard, Action task, float chance) {
+	public ChanceDecorator(Blackboard blackboard, Task task, float chance) {
 		super(blackboard, task);
 		Init(chance);
 	}
@@ -33,7 +33,7 @@ public class ChanceDecorator extends ActionDecorator
 	 * @param name Name of the class, for debug purposes
 	 * @param chance Chance to choose this task, range ]0,100[
 	 */
-	public ChanceDecorator(Blackboard blackboard, Action task, String name, float chance) {
+	public ChanceDecorator(Blackboard blackboard, Task task, String name, float chance) {
 		super(blackboard, task, name);
 		Init(chance);
 		

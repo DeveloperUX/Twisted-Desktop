@@ -1,7 +1,7 @@
 package twisted.rubber.ai.complexbehavior.controller;
 
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
-import twisted.rubber.ai.complexbehavior.library.LeafAction;
+import twisted.rubber.ai.complexbehavior.library.Behavior;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,7 +14,7 @@ import com.biigoh.utils.Vector2Pool;
  * Attempt to drive towards a set position,
  * specified in the {@link Blackboard} object
  */
-public class MoveInDirection extends LeafAction {
+public class MoveInDirection extends Behavior {
 
 	public MoveInDirection(Blackboard blackboard) {
 		super(blackboard);

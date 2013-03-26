@@ -3,9 +3,9 @@ package twisted.rubber.ai.complexbehavior.controller;
 import com.biigoh.utils.MathMan;
 
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
-import twisted.rubber.ai.complexbehavior.library.LeafAction;
+import twisted.rubber.ai.complexbehavior.library.Behavior;
 
-public class BackAwayFromObstacleAction extends LeafAction {
+public class BackAwayFromObstacleAction extends Behavior {
 
 	/**
 	 * Creates a new instance of the AvoidObstacleAction class

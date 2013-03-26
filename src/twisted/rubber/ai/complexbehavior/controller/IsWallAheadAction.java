@@ -2,7 +2,7 @@ package twisted.rubber.ai.complexbehavior.controller;
 
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
 import twisted.rubber.ai.complexbehavior.library.Blackboard.Rays;
-import twisted.rubber.ai.complexbehavior.library.LeafAction;
+import twisted.rubber.ai.complexbehavior.library.Behavior;
 
 import com.badlogic.gdx.math.Vector2;
 import com.biigoh.controls.AIRaycastCallback;
@@ -10,7 +10,7 @@ import com.biigoh.launch.EntityData;
 import com.biigoh.screens.BattleScreen;
 import com.biigoh.utils.MathMan;
 
-public class IsWallAheadAction extends LeafAction {
+public class IsWallAheadAction extends Behavior {
 
 
 	public IsWallAheadAction(Blackboard blackboard, String name) {

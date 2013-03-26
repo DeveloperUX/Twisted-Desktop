@@ -10,19 +10,19 @@ package twisted.rubber.ai.complexbehavior.library;
  * @author Moose
  *
  */
-public abstract class ActionDecorator extends Action 
+public abstract class ActionDecorator extends Task 
 {
 	/**
 	 * Reference to the task to decorate
 	 */
-	Action task;
+	Task task;
 
 	/**
 	 * Creates a new instance of the Decorator class
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param task Task to decorate
 	 */
-	public ActionDecorator(Blackboard blackboard, Action task) 
+	public ActionDecorator(Blackboard blackboard, Task task) 
 	{
 		super(blackboard);
 		InitTask(task);
@@ -34,7 +34,7 @@ public abstract class ActionDecorator extends Action
 	 * @param task Task to decorate
 	 * @param name Name of the class, for debugging
 	 */
-	public ActionDecorator(Blackboard blackboard, Action task, String name) 
+	public ActionDecorator(Blackboard blackboard, Task task, String name) 
 	{
 		super(blackboard, name);
 		InitTask(task);
@@ -44,7 +44,7 @@ public abstract class ActionDecorator extends Action
 	 * Initializes the task reference
 	 * @param task Task to decorate
 	 */
-	private void InitTask(Action task)
+	private void InitTask(Task task)
 	{
 		this.task = task;
 		this.task.GetControl().SetTask(this);
@@ -72,7 +72,7 @@ public abstract class ActionDecorator extends Action
 	 * Decorate the request for the Control reference
 	 */
 	@Override
-	public ActionController GetControl() 
+	public BehaviorController GetControl() 
 	{
 		return this.task.GetControl();
 	}

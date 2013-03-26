@@ -12,7 +12,7 @@ import twisted.rubber.ai.simplebehavior.library._Behavior.Status;
  * @author Moose
  *
  */
-public class ActionController {
+public class BehaviorController {
 
 	// Possible return states for each behavior
 	protected Status mStatus;
@@ -34,13 +34,13 @@ public class ActionController {
 	private boolean started;
 	
 	/** Reference to the task we monitor */
-	private Action task;
+	private Task task;
 	
 	/**
 	 * Creates a new instance of the TaskController class
 	 * @param task Task to controll.
 	 */
-	public ActionController(Action task) {
+	public BehaviorController(Task task) {
 		SetTask(task);
 		Initialize();
 	}
@@ -56,7 +56,7 @@ public class ActionController {
 	 * Sets the task reference
 	 * @param task Task to monitor
 	 */
-	public void SetTask(Action task) {
+	public void SetTask(Task task) {
 		this.task = task;
 	}
 	
@@ -91,7 +91,7 @@ public class ActionController {
 	 * Indicates whether the task finished successfully
 	 * @return True if it did, false if it didn't
 	 */
-	public boolean Succeeded() {
+	public boolean isSucceeded() {
 		return this.success;
 	}
 	
@@ -99,7 +99,7 @@ public class ActionController {
 	 * Indicates whether the task finished with failure
 	 * @return True if it did, false if it didn't
 	 */
-	public boolean Failed()	{
+	public boolean isFailed()	{
 		return !this.success;
 	}
 	
@@ -107,7 +107,7 @@ public class ActionController {
 	 * Indicates whether the task finished
 	 * @return True if it did, false if it didn't
 	 */
-	public boolean Finished() {
+	public boolean isFinished() {
 		return this.done;
 	}
 	
@@ -115,7 +115,7 @@ public class ActionController {
 	 * Indicates whether the class has started or not
 	 * @return True if it has, false if it hasn't
 	 */
-	public boolean Started() {
+	public boolean isStarted() {
 		return this.started;
 	}
 	

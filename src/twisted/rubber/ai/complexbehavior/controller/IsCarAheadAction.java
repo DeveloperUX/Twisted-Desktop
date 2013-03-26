@@ -7,9 +7,9 @@ import com.biigoh.screens.BattleScreen;
 import com.biigoh.utils.MathMan;
 
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
-import twisted.rubber.ai.complexbehavior.library.LeafAction;
+import twisted.rubber.ai.complexbehavior.library.Behavior;
 
-public class IsCarAheadAction extends LeafAction {
+public class IsCarAheadAction extends Behavior {
 
 
 	public IsCarAheadAction(Blackboard blackboard, String name) {

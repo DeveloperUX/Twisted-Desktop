@@ -12,7 +12,7 @@ package twisted.rubber.ai.complexbehavior.library;
  * @author Moose
  *
  */
-public class Sequence extends ParentAction {
+public class Sequence extends Branch {
 	/**
 	 * Creates a new instance of the Sequence class
 	 * @param blackboard Reference to the AI Blackboard data

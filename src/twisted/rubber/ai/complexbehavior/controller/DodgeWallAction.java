@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
-import twisted.rubber.ai.complexbehavior.library.LeafAction;
+import twisted.rubber.ai.complexbehavior.library.Behavior;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -20,7 +20,7 @@ import com.biigoh.utils.MathMan;
 import com.biigoh.utils.Physics;
 import com.biigoh.utils.Vector2Pool;
 
-public class DodgeWallAction extends LeafAction {
+public class DodgeWallAction extends Behavior {
 	
 	private static final String LOG = "@ " + DodgeWallAction.class.getSimpleName();
 	private static final Boolean DEBUG = true;
@@ -28,6 +28,14 @@ public class DodgeWallAction extends LeafAction {
 	Vector3 dir;
 	Vector3 steering;
 	Boolean checkObstacles = true;
+	
+	private enum Wing {
+		LEFT, 	
+		RIGHT,
+		BOTH,
+		NEITHER
+	}
+	private Wing wingHit;
 	
 	/**
 	 * Creates a new instance of the AvoidObstacleAction class
@@ -55,17 +63,8 @@ public class DodgeWallAction extends LeafAction {
 	@Override
 	public void Start() {
 		LogTask("Starting");
-	}
-
-	@Override
-	public void End() {
-		LogTask("Ending");
-	}
-
-	@Override
-	public void DoAction() {
-		DebugAction();
-		LogTask("Doing Action");
+		wingHit = Wing.NEITHER;
+		
 		// clear normals from list
 		normals.clear();
 		
@@ -93,13 +92,34 @@ public class DodgeWallAction extends LeafAction {
 		bb.leftRayHit = obstacleAhead(leftRayCallback);
 		bb.rightRayHit = obstacleAhead(rightRayCallback);
 		
+		if( bb.leftRayHit && bb.rightRayHit )
+			wingHit = Wing.BOTH;
+		else if( bb.leftRayHit )
+			wingHit = Wing.LEFT;
+		else if( bb.rightRayHit )
+			wingHit = Wing.RIGHT;
 		
-		Vector2 curForward = bb.carToControl.getBody().getLinearVelocity().nor().cpy();		
+	}
+
+	@Override
+	public void End() {
+		LogTask("Ending");
+		wingHit = Wing.NEITHER;
+	}
+
+	@Override
+	public void DoAction() {
+		DebugAction();
+		LogTask("Doing Action");
+		
+		
+		
+		Vector2 resultingForward = bb.carToControl.getBody().getLinearVelocity().cpy().nor().mul(2);		
 		for( Vector2 vector : normals )
-			curForward.add(vector);
+			resultingForward.add(vector);
 		
 		if( bb.forwardRayHit && (!bb.rightRayHit && !bb.leftRayHit) )
-			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), curForward.nor() );
+			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), resultingForward.nor() );
 		// Steer to the left
 		else if( bb.forwardRayHit || (bb.leftRayHit && bb.rightRayHit && bb.forwardRayHit) ) 
 			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );			 

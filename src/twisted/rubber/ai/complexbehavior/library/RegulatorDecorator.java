@@ -26,7 +26,7 @@ public class RegulatorDecorator extends ActionDecorator
 	 * @param name Name of the class, used for debugging
 	 * @param updateTime Time between each frame update
 	 */
-	public RegulatorDecorator(Blackboard blackboard, Action task, String name, float updateTime) 
+	public RegulatorDecorator(Blackboard blackboard, Task task, String name, float updateTime) 
 	{
 		super(blackboard, task, name);
 		this.updateTime = updateTime;
@@ -40,7 +40,7 @@ public class RegulatorDecorator extends ActionDecorator
 	 * @param task Task to decorate
 	 * @param updateTime Time between each frame update
 	 */
-	public RegulatorDecorator(Blackboard blackboard, Action task, float updateTime) 
+	public RegulatorDecorator(Blackboard blackboard, Task task, float updateTime) 
 	{
 		super(blackboard, task);
 		this.updateTime = updateTime;

@@ -12,14 +12,14 @@ import com.badlogic.gdx.Gdx;
  * @author Moose
  *
  */
-public abstract class ParentAction extends Action 
+public abstract class Branch extends Task 
 {
 	/**
 	 * TaskControler for the parent task
 	 */
-	ParentActionController control;
+	BranchController control;
 	
-	public ParentAction(Blackboard blackboard)
+	public Branch(Blackboard blackboard)
 	{
 		super(blackboard);
 		CreateController();
@@ -30,7 +30,7 @@ public abstract class ParentAction extends Action
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param name Name of the class for debugging
 	 */
-	public ParentAction(Blackboard blackboard, String name)
+	public Branch(Blackboard blackboard, String name)
 	{
 		super(blackboard, name);
 		CreateController();
@@ -41,14 +41,14 @@ public abstract class ParentAction extends Action
 	 */
 	private void CreateController()
 	{
-		this.control = new ParentActionController(this);
+		this.control = new BranchController(this);
 	}
 	
 	/**
 	 * Gets the control reference
 	 */
 	@Override
-	public ActionController GetControl() 
+	public BehaviorController GetControl() 
 	{
 		return control;
 	}
@@ -80,7 +80,7 @@ public abstract class ParentAction extends Action
 	@Override
 	public void DoAction() {
 		LogTask("Doing action");
-		if(control.Finished())
+		if(control.isFinished())
 		{
 			return;
 		}
@@ -92,21 +92,21 @@ public abstract class ParentAction extends Action
 		}
 		
 		// If we do have a curTask...
-		if( !control.curTask.GetControl().Started())
+		if( !control.curTask.GetControl().isStarted())
 		{
 			// ... and it's not started yet, start it.
 			control.curTask.GetControl().SafeStart();
 		}		
-		else if(control.curTask.GetControl().Finished())
+		else if(control.curTask.GetControl().isFinished())
 		{
 			// ... and it's finished, end it properly.
 			control.curTask.GetControl().SafeEnd();
 			
-			if(control.curTask.GetControl().Succeeded())
+			if(control.curTask.GetControl().isSucceeded())
 			{
 				this.ChildSucceeded();
 			}
-			if(control.curTask.GetControl().Failed())
+			if(control.curTask.GetControl().isFailed())
 			{
 				this.ChildFailed();
 			}

@@ -16,7 +16,7 @@ public class RepeatDecorator extends ActionDecorator
 	 * @param task Task to decorate
 	 * @param name Name of the class, used for debugging
 	 */
-	public RepeatDecorator(Blackboard blackboard, Action task, String name)	{
+	public RepeatDecorator(Blackboard blackboard, Task task, String name)	{
 		super(blackboard, task, name);
 	}
 	
@@ -25,7 +25,7 @@ public class RepeatDecorator extends ActionDecorator
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param task Task to decorate
 	 */
-	public RepeatDecorator(Blackboard blackboard, Action task) {
+	public RepeatDecorator(Blackboard blackboard, Task task) {
 		super(blackboard, task);
 	}
 
@@ -35,7 +35,7 @@ public class RepeatDecorator extends ActionDecorator
 	@Override
 	public void DoAction() {
 		task.DoAction();
-		if(task.GetControl().Failed())
+		if(task.GetControl().isFailed())
 			task.GetControl().Reset();
 		
 	}

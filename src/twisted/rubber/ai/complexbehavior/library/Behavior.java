@@ -14,16 +14,16 @@ import com.biigoh.screens.BattleScreen;
  * @author Moose
  *
  */
-public abstract class LeafAction extends Action {
+public abstract class Behavior extends Task {
 	
 	/** Task controller to keep track of the Task state */
-	protected ActionController control;
+	protected BehaviorController control;
 
 	/**
 	 * Creates a new instance of the LeafTask class
 	 * @param blackboard Reference to the AI Blackboard data
 	 */
-	public LeafAction(Blackboard blackboard) {
+	public Behavior(Blackboard blackboard) {
 		super(blackboard);
 		CreateController();
 	}
@@ -33,19 +33,19 @@ public abstract class LeafAction extends Action {
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param name Name of the class for debugging
 	 */
-	public LeafAction(Blackboard blackboard, String name) {
+	public Behavior(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		CreateController();
 	}
 	
 	/** Creates the controller for the class */
 	private void CreateController() {
-		this.control = new ActionController(this);
+		this.control = new BehaviorController(this);
 	}
 	
 	/** Gets the controller reference */
 	@Override
-	public ActionController GetControl() {
+	public BehaviorController GetControl() {
 		return this.control;
 	}
 

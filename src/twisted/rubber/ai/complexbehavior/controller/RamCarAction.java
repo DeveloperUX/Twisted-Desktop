@@ -1,9 +1,9 @@
 package twisted.rubber.ai.complexbehavior.controller;
 
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
-import twisted.rubber.ai.complexbehavior.library.LeafAction;
+import twisted.rubber.ai.complexbehavior.library.Behavior;
 
-public class RamCarAction extends LeafAction {
+public class RamCarAction extends Behavior {
 
 	private long timeBeforeUpdate;
 	private long timeDiff;

@@ -267,6 +267,33 @@ public class AIController extends Controller {
 		
 	}
 	
+	float prediction = 0;
+	float maxPrediction = 0.1f;
+	
+	public void chaseTarget_Diff( Vehicle carToChase ) {
+		// 1. Calculate the target to delegate to seek 19
+		
+		// Work out the distance to target
+		Vector2 direction = carToChase.getPosition().cpy().sub( mCarToControl.getPosition() );
+		float distance = direction.len();
+		
+		// Work out our current speed
+		float speed = mCarToControl.curLinear.len();
+		
+		// Check if speed is too small to give a reasonable
+		// prediction time
+		if (speed <= distance / maxPrediction)
+			prediction = maxPrediction;
+		
+		// Otherwise calculate the prediction time
+		else
+			prediction = distance / speed;
+		
+		// Put the target together
+//		Seek.target = explicitTarget
+//		Seek.target.position += carToChase.curLinear.cpy().mul( prediction );
+	}
+	
 	/**
 	 * Set this AI Car to chase the given Car
 	 * @param carToChase The car that this AI should chase
@@ -278,8 +305,10 @@ public class AIController extends Controller {
 		// ALSO: remember to invert the angle between the two points cause the Joystick works that way!
 		
 		// INTERCEPT ALGORITHM
-//		Vector2 vR = carToChase.curLinear.cpy().sub( mCarToControl.curLinear );
-		Vector2 vR = carToChase.curLinear.cpy().sub( Vector2Pool.obtain(MachineGunRound.speed,0) );
+		
+		Vector2 vR = carToChase.curLinear.cpy().sub( mCarToControl.curLinear );
+//		Vector2 vR = carToChase.curLinear.cpy().sub( Vector2Pool.obtain(MachineGunRound.speed,0) );
+		// Work out the distance to target
 		Vector2 sR = carToChase.getPosition().sub( mCarToControl.getPosition() );
 		float tC = sR.len() / vR.len();
 		Vector2 sT = carToChase.getPosition().add( carToChase.curLinear.cpy().mul( tC ) );

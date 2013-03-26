@@ -5,9 +5,9 @@ import twisted.rubber.ai.complexbehavior.controller.IsCarAheadAction;
 import twisted.rubber.ai.complexbehavior.controller.IsWallAheadAction;
 import twisted.rubber.ai.complexbehavior.controller.MoveInDirection;
 import twisted.rubber.ai.complexbehavior.controller.RamCarAction;
-import twisted.rubber.ai.complexbehavior.library.Action;
+import twisted.rubber.ai.complexbehavior.library.Task;
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
-import twisted.rubber.ai.complexbehavior.library.ParentActionController;
+import twisted.rubber.ai.complexbehavior.library.BranchController;
 import twisted.rubber.ai.complexbehavior.library.RegulatorDecorator;
 import twisted.rubber.ai.complexbehavior.library.RepeatDecorator;
 import twisted.rubber.ai.complexbehavior.library.ResetDecorator;
@@ -19,7 +19,7 @@ import com.biigoh.gameObjects.vehicles.Vehicle;
 public class AiComplexTree extends Controller {
 
 	/** Root task of the behavior tree for the AI */
-	private Action rootPlanner;
+	private Task rootPlanner;
 	/** Shared information blackboard for all AI objects */
 	private Blackboard blackboard;
 	
@@ -62,31 +62,31 @@ public class AiComplexTree extends Controller {
 //		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
 
 		// Maneuvering between obstacles
-		Action maneuver = new Selector(blackboard, "Maneuver");
+		Task maneuver = new Selector(blackboard, "Maneuver");
 		
 		// Avoid Wall actions
-		Action avoidanceSequence = new Sequence(blackboard, "Avoidance");
+		Task avoidanceSequence = new Sequence(blackboard, "Avoidance");
 //		avoidanceSequence = new RepeatDecorator(blackboard, avoidanceSequence, "Avoid Wall Reset");
-		((ParentActionController) avoidanceSequence.GetControl()).add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
-		((ParentActionController) avoidanceSequence.GetControl()).add(new DodgeWallAction(blackboard, "Dodge Wall"));
+		((BranchController) avoidanceSequence.GetControl()).add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
+		((BranchController) avoidanceSequence.GetControl()).add(new DodgeWallAction(blackboard, "Dodge Wall"));
 		
 		// Ram Car actions
-		Action meleeSequence = new Sequence(blackboard, "Melee");		
-		((ParentActionController) meleeSequence.GetControl()).add(new IsCarAheadAction(blackboard, "Car Ahead?"));
-		((ParentActionController) meleeSequence.GetControl()).add(new RamCarAction(blackboard, "Ram Car"));
+		Task meleeSequence = new Sequence(blackboard, "Melee");		
+		((BranchController) meleeSequence.GetControl()).add(new IsCarAheadAction(blackboard, "Car Ahead?"));
+		((BranchController) meleeSequence.GetControl()).add(new RamCarAction(blackboard, "Ram Car"));
 		
 		// Add Maneuvering sequences to Selector
-		((ParentActionController) maneuver.GetControl()).add( avoidanceSequence );
-		((ParentActionController) maneuver.GetControl()).add( meleeSequence );
+		((BranchController) maneuver.GetControl()).add( avoidanceSequence );
+		((BranchController) maneuver.GetControl()).add( meleeSequence );
 //		((ParentActionController) maneuver.GetControl()).Add(new BackAwayFromObstacleAction(blackboard, "Back Up"));
 		
 		// Chase sequence
-		Action combatSequence = new Sequence(blackboard, "Combat");
-		((ParentActionController) combatSequence.GetControl()).add(new MoveInDirection(blackboard, "Move In Direction"));
+		Task combatSequence = new Sequence(blackboard, "Combat");
+		((BranchController) combatSequence.GetControl()).add(new MoveInDirection(blackboard, "Move In Direction"));
 		
 		// Add to planner
-		((ParentActionController) rootPlanner.GetControl()).add(maneuver);
-		((ParentActionController) rootPlanner.GetControl()).add(combatSequence);
+		((BranchController) rootPlanner.GetControl()).add(maneuver);
+		((BranchController) rootPlanner.GetControl()).add(combatSequence);
 		
 		// Chase enemy vehicle
 //		Action chaseEnemy = new Sequence(blackboard, "Circle chase sequence");
