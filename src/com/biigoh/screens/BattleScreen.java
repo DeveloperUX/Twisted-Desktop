@@ -128,7 +128,7 @@ public class BattleScreen extends AbstractScreen {
 //		gameMap = new GameMap( CAM_METER_WIDTH, CAM_METER_HEIGHT );
 
 		levelLoader = new MapLoader( battleStage.getCamera() );
-		levelLoader.loadMapLevel( 2 );
+		levelLoader.loadMapLevel( 5 );
 		
 		
 		// ------------- Create a new Game --------------------- //

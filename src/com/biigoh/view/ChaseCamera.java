@@ -131,15 +131,15 @@ public class ChaseCamera extends OrthographicCamera {
 		}
 		
 		// update the camera's zoom depending on the speed of the car
-//		updateZoom(carToChase.currentSpeed);
+		updateZoom(carToChase.currentSpeed);
 		
 		// move the camera to the player's new position.
 		// ie: Make the camera chase the player around
-//		updatePosition(carToChase);
+		updatePosition(carToChase);
 		
 		
-		position.set( 0, 0, 0 );
-		zoom = 5;
+//		position.set( 0, 0, 0 );
+//		zoom = 5;
 
 		if(DEBUG) Gdx.app.log( LOG, "update() :: Zoom level: " + zoom );
 		
