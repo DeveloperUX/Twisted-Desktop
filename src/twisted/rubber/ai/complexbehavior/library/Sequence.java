@@ -50,7 +50,7 @@ public class Sequence extends Branch {
 			control.FinishWithSuccess();		
 		else {
 			control.curTask = control.subtasks.elementAt(curPos + 1);
-			if(!control.curTask.CheckConditions())
+			if(!control.curTask.checkPreConditions())
 				control.FinishWithFailure();			
 		}
 	}

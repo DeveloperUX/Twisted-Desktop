@@ -53,14 +53,14 @@ public abstract class Task
 	 * @param text Message to display
 	 */
 	public void LogTask(String text) {
-		if(DEBUG) Gdx.app.log("Action", name + " - " + text);
+		if(DEBUG) Gdx.app.log(name, "\t \t " + text);
 	}
 	
 	/**
 	 * Override to do a pre-conditions check to see if the task can be updated.
 	 * @return True if it can, false if it can't
 	 */
-	public abstract boolean CheckConditions();
+	public abstract boolean checkPreConditions();
 	
 	/** Override to add startup logic to the task */
 	public abstract void Start();

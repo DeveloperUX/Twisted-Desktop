@@ -1,25 +1,32 @@
 package com.biigoh.controls;
 
-import twisted.rubber.ai.complexbehavior.controller.DodgeWallAction;
-import twisted.rubber.ai.complexbehavior.controller.IsCarAheadAction;
-import twisted.rubber.ai.complexbehavior.controller.IsWallAheadAction;
+import twisted.rubber.ai.complexbehavior.controller.DodgeWall;
+import twisted.rubber.ai.complexbehavior.controller.FindNearestEnemy;
+import twisted.rubber.ai.complexbehavior.controller.FireWeapon;
+import twisted.rubber.ai.complexbehavior.controller.IsEnemyBehind;
+import twisted.rubber.ai.complexbehavior.controller.IsEnemyInFieldOfView;
+import twisted.rubber.ai.complexbehavior.controller.IsEnemyInLineOfFire;
+import twisted.rubber.ai.complexbehavior.controller.IsEnemyNearby;
+import twisted.rubber.ai.complexbehavior.controller.IsWallAhead;
 import twisted.rubber.ai.complexbehavior.controller.MoveInDirection;
-import twisted.rubber.ai.complexbehavior.controller.RamCarAction;
-import twisted.rubber.ai.complexbehavior.library.Task;
+import twisted.rubber.ai.complexbehavior.controller.MoveInOppositeDirection;
+import twisted.rubber.ai.complexbehavior.controller.PredictTargetPosition;
+import twisted.rubber.ai.complexbehavior.controller.IsTargetInRange;
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
 import twisted.rubber.ai.complexbehavior.library.BranchController;
+import twisted.rubber.ai.complexbehavior.library.InvertDecorator;
 import twisted.rubber.ai.complexbehavior.library.RegulatorDecorator;
-import twisted.rubber.ai.complexbehavior.library.RepeatDecorator;
 import twisted.rubber.ai.complexbehavior.library.ResetDecorator;
 import twisted.rubber.ai.complexbehavior.library.Selector;
 import twisted.rubber.ai.complexbehavior.library.Sequence;
+import twisted.rubber.ai.complexbehavior.library.Task;
 
 import com.biigoh.gameObjects.vehicles.Vehicle;
 
 public class AiComplexTree extends Controller {
 
 	/** Root task of the behavior tree for the AI */
-	private Task rootPlanner;
+	private Task root;
 	/** Shared information blackboard for all AI objects */
 	private Blackboard blackboard;
 	
@@ -48,7 +55,7 @@ public class AiComplexTree extends Controller {
 	 */
 	@Override
 	public void Start() {
-		this.rootPlanner.GetControl().SafeStart();
+		this.root.GetControl().SafeStart();
 	}
 
 	/**
@@ -57,41 +64,72 @@ public class AiComplexTree extends Controller {
 	 */
 	private void createBehaviorTree() {
 		// Planner
-		this.rootPlanner = new Selector(blackboard, "Planner");
-		this.rootPlanner = new ResetDecorator(blackboard, this.rootPlanner, "Planner");
-//		this.rootPlanner = new RegulatorDecorator(blackboard, this.rootPlanner, "Planner", 0.1f);
+		this.root = new Selector(blackboard, "Planner");
+		this.root = new ResetDecorator(blackboard, this.root, "Planner");
+//		this.root = new RegulatorDecorator(blackboard, this.root, "Planner", 0.1f);
+		
+//		Task wallAhead = new IsWallAhead(blackboard, "(C) Wall Ahead?");
+//		Task noWallAhead = new InvertDecorator(blackboard, wallAhead, "(C) No Wall Ahead?");
+
+		// Combat Sequence
+		Task combat = new Sequence(blackboard, "Combat");
+		((BranchController) combat.GetControl()).add(new IsEnemyInLineOfFire(blackboard, "(C) Enemy In Line of Fire?"));
+		((BranchController) combat.GetControl()).add(new IsTargetInRange(blackboard, "(C) Target In Range?"));
+//		((BranchController) combat.GetControl()).add(new HaveEnoughAmmo(blackboard, "(C) Have Adequate Ammo?"));
+		((BranchController) combat.GetControl()).add(new FireWeapon(blackboard, "(A) Fire Weapon"));
+		
+		// Chase sequence
+		Task chase = new Sequence(blackboard, "Chase");
+		((BranchController) chase.GetControl()).add(new InvertDecorator(blackboard, new IsWallAhead(blackboard, "(C) No Wall Ahead?")));
+		((BranchController) chase.GetControl()).add(new FindNearestEnemy(blackboard, "(A) Find Nearest Enemy"));
+//		((BranchController) chase.GetControl()).add(new IsEnemyAhead(blackboard, "(C) Enemy Ahead?"));
+		((BranchController) chase.GetControl()).add(new IsEnemyInFieldOfView(blackboard, "(C) Enemy In Field of View?"));
+		// Predict Position
+		((BranchController) chase.GetControl()).add(new PredictTargetPosition(blackboard, "(A) Predict Target Position"));
+		// Move in direction of target
+		((BranchController) chase.GetControl()).add(new MoveInDirection(blackboard, "(A) Move In Specified Direction"));
+				
+		((BranchController) chase.GetControl()).add( combat );
+
+		// Create Evasion Sequence
+		Task evade = new Sequence(blackboard, "Evade");
+		((BranchController) evade.GetControl()).add(new InvertDecorator(blackboard, new IsWallAhead(blackboard, "(C) No Wall Ahead?")));
+		((BranchController) evade.GetControl()).add(new FindNearestEnemy(blackboard, "(A) Find Nearest Enemy"));
+		((BranchController) evade.GetControl()).add(new IsEnemyBehind(blackboard, "(C) Enemy Behind Us?"));
+		((BranchController) evade.GetControl()).add(new IsEnemyNearby(blackboard, "(C) Enemy Nearby?"));
+		((BranchController) evade.GetControl()).add(new PredictTargetPosition(blackboard, "(A) Predict Target Position"));
+		((BranchController) evade.GetControl()).add(new MoveInOppositeDirection(blackboard, "(A) Move In Opposite Direction"));
+		
+			
+		// Ram Car Sequence
+//		Task ramEnemy = new Sequence(blackboard, "Melee");		
+//		((BranchController) ramEnemy.GetControl()).add(new IsEnemyClose(blackboard, "(C) Enemy Close?"));
+//		((BranchController) ramEnemy.GetControl()).add(new IsEnemyAhead(blackboard, "(C) Enemy Ahead?"));
+//		((BranchController) ramEnemy.GetControl()).add(new RamEnemy(blackboard, "(A) Ram Car"));
+				
+//		Task flee = new Sequence(blackboard, "Flee");
+//		((BranchController) flee.GetControl()).add(maneuver);
 
 		// Maneuvering between obstacles
 		Task maneuver = new Selector(blackboard, "Maneuver");
+//		maneuver = new RegulatorDecorator(blackboard, maneuver, "Planner", 0.1f);
 		
+		((BranchController) maneuver.GetControl()).add( evade );
+		((BranchController) maneuver.GetControl()).add( chase );
+//		((ParentActionController) maneuver.GetControl()).Add(new BackAwayFromObstacleAction(blackboard, "Back Up"));		
+
 		// Avoid Wall actions
-		Task avoidanceSequence = new Sequence(blackboard, "Avoidance");
+		Task dodge = new Sequence(blackboard, "Avoidance");
 //		avoidanceSequence = new RepeatDecorator(blackboard, avoidanceSequence, "Avoid Wall Reset");
-		((BranchController) avoidanceSequence.GetControl()).add(new IsWallAheadAction(blackboard, "Wall Ahead?"));
-		((BranchController) avoidanceSequence.GetControl()).add(new DodgeWallAction(blackboard, "Dodge Wall"));
-		
-		// Ram Car actions
-		Task meleeSequence = new Sequence(blackboard, "Melee");		
-		((BranchController) meleeSequence.GetControl()).add(new IsCarAheadAction(blackboard, "Car Ahead?"));
-		((BranchController) meleeSequence.GetControl()).add(new RamCarAction(blackboard, "Ram Car"));
-		
-		// Add Maneuvering sequences to Selector
-		((BranchController) maneuver.GetControl()).add( avoidanceSequence );
-		((BranchController) maneuver.GetControl()).add( meleeSequence );
-//		((ParentActionController) maneuver.GetControl()).Add(new BackAwayFromObstacleAction(blackboard, "Back Up"));
-		
-		// Chase sequence
-		Task combatSequence = new Sequence(blackboard, "Combat");
-		((BranchController) combatSequence.GetControl()).add(new MoveInDirection(blackboard, "Move In Direction"));
+		((BranchController) dodge.GetControl()).add(new IsWallAhead(blackboard, "(C) Wall Ahead?"));
+		((BranchController) dodge.GetControl()).add(new DodgeWall(blackboard, "(A) Dodge Wall"));
 		
 		// Add to planner
-		((BranchController) rootPlanner.GetControl()).add(maneuver);
-		((BranchController) rootPlanner.GetControl()).add(combatSequence);
-		
-		// Chase enemy vehicle
-//		Action chaseEnemy = new Sequence(blackboard, "Circle chase sequence");
-//		((ParentActionController) chaseEnemy.GetControl()).Add(new ChaseEnemyAction(blackboard, "BackAwayFromObstacle"));
-				
+//		((BranchController) root.GetControl()).add(dodge);
+//		((BranchController) root.GetControl()).add(new FindNearestEnemy(blackboard, "(A) Find Nearest Enemy"));
+		((BranchController) root.GetControl()).add(dodge);
+		((BranchController) root.GetControl()).add(maneuver);
+						
 	}
 	
 	
@@ -99,7 +137,7 @@ public class AiComplexTree extends Controller {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		this.rootPlanner.DoAction();
+		this.root.DoAction();
 	}
 
 }

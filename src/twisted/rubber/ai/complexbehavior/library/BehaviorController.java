@@ -77,14 +77,14 @@ public class BehaviorController {
 	public void FinishWithSuccess() {
 		this.success = true;
 		this.done = true;
-		task.LogTask("Finished with success \n");
+//		task.LogTask("Finished with success \n");
 	}
 
 	/** Ends the monitored class, with failure */
 	public void FinishWithFailure() {
 		this.success = false;
 		this.done = true;
-		task.LogTask("Finished with failure \n");
+//		task.LogTask("Finished with failure \n");
 	}
 	
 	/**

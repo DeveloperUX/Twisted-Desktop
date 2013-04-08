@@ -3,7 +3,7 @@ package twisted.rubber.ai.complexbehavior.controller;
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
 import twisted.rubber.ai.complexbehavior.library.Behavior;
 
-public class RamCarAction extends Behavior {
+public class RamEnemy extends Behavior {
 
 	private long timeBeforeUpdate;
 	private long timeDiff;
@@ -11,13 +11,13 @@ public class RamCarAction extends Behavior {
 	
 	private float oldJoystickStrength;
 	
-	public RamCarAction(Blackboard blackboard, String name) {
+	public RamEnemy(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public boolean CheckConditions() {
+	public boolean checkPreConditions() {
 		// TODO Auto-generated method stub
 		return true;
 	}

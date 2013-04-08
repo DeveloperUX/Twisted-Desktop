@@ -26,6 +26,9 @@ public class Blackboard {
 	
 	/** Closest enemy vehicle */
 	public Vehicle closestEnemy;
+
+	/** Enemy vehicle we have considered a target */
+	public Vehicle targetEnemy;
 	
 	/** Position to move towards */
 	public Vector2 moveLocation;
@@ -51,6 +54,8 @@ public class Blackboard {
 
 	public int vehicleId;	
 	public Vehicle carToControl;
+
+	public Vector2 targetLocation;
 	
 	/**
 	 * Create a new shared Blackboard for storing and sharing information
@@ -73,6 +78,38 @@ public class Blackboard {
 	// TODO Take this out, not used
 	public Controller getAiControls() {
 		return carToControl.getController();
+	}
+
+	/**
+	 * Find the next nearest car to chase or evade
+	 * @return The closest car in distance to this car
+	 */
+	public float findClosestEnemy() {
+		
+//		closestEnemy = null;
+		
+		float closestDistance = Float.MAX_VALUE;
+		float distance = 0;
+		
+		// All the cars in the Arena
+		Collection<Vehicle> carList = carToControl.getArena().getCarList();
+
+		// either we find a new Target or keep the previous target if
+		// no new targets were found, or if no target is closer
+		for( Vehicle car : carList ) 
+			// make sure we're not checking ourselves
+			if( car.getID() != carToControl.getID() )	{ 
+				// get the distance between the two cars
+				distance = carToControl.getPosition().cpy().sub( car.getPosition() ).len();
+				// if closer, set the car as the new target
+				if( distance < closestDistance ) {
+					closestDistance = distance;
+					closestEnemy = car;
+				}
+			}				
+		
+		
+		return distance;
 	}
 	
 //	public void setAiController( Controller aiControls ) {

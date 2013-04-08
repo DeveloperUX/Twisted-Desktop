@@ -25,7 +25,7 @@ public class BackAwayFromObstacleAction extends Behavior {
 	}
 
 	@Override
-	public boolean CheckConditions() {
+	public boolean checkPreConditions() {
 		LogTask("Checking conditions");
 		return true;
 	}

@@ -10,16 +10,16 @@ import com.biigoh.launch.EntityData;
 import com.biigoh.screens.BattleScreen;
 import com.biigoh.utils.MathMan;
 
-public class IsWallAheadAction extends Behavior {
+public class IsWallAhead extends Behavior {
 
 
-	public IsWallAheadAction(Blackboard blackboard, String name) {
+	public IsWallAhead(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public boolean CheckConditions() {
+	public boolean checkPreConditions() {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -38,7 +38,6 @@ public class IsWallAheadAction extends Behavior {
 
 	@Override
 	public void DoAction() {
-		LogTask("Doing Action");
 		DebugAction();
 		// Get the distance to look ahead of us depending on how fast we're moving
 		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 80, 10, 50 );
@@ -73,10 +72,14 @@ public class IsWallAheadAction extends Behavior {
 //			bb.rayhit = Rays.RIGHT;
 		
 		// If any raycast was hit finish with success
-		if( bb.forwardRayHit || bb.leftRayHit || bb.rightRayHit )
+		if( bb.forwardRayHit || bb.leftRayHit || bb.rightRayHit ) {
+			LogTask("YES");
 			GetControl().FinishWithSuccess();		
-		else
+		}
+		else {
+			LogTask("NO");
 			GetControl().FinishWithFailure();
+		}
 	}
 
 	private boolean obstacleAhead( AIRaycastCallback callback ) {		

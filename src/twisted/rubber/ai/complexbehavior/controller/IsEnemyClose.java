@@ -9,16 +9,16 @@ import com.biigoh.utils.MathMan;
 import twisted.rubber.ai.complexbehavior.library.Blackboard;
 import twisted.rubber.ai.complexbehavior.library.Behavior;
 
-public class IsCarAheadAction extends Behavior {
+public class IsEnemyClose extends Behavior {
 
 
-	public IsCarAheadAction(Blackboard blackboard, String name) {
+	public IsEnemyClose(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public boolean CheckConditions() {
+	public boolean checkPreConditions() {
 		// TODO Auto-generated method stub
 		return true;
 	}

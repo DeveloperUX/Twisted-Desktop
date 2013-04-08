@@ -67,10 +67,10 @@ public class ChanceDecorator extends ActionDecorator
 	 * chance to be chosen.
 	 */
 	@Override
-	public boolean CheckConditions()
+	public boolean checkPreConditions()
 	{
 		float value = rand.nextFloat() % 100;
-		return task.CheckConditions() && value < this.chance;
+		return task.checkPreConditions() && value < this.chance;
 	}
 
 }

@@ -14,14 +14,14 @@ import com.biigoh.utils.Vector2Pool;
  * Attempt to drive towards a set position,
  * specified in the {@link Blackboard} object
  */
-public class MoveInDirection extends Behavior {
+public class MoveInOppositeDirection extends Behavior {
 
-	public MoveInDirection(Blackboard blackboard) {
+	public MoveInOppositeDirection(Blackboard blackboard) {
 		super(blackboard);
 		// TODO Auto-generated constructor stub
 	}
 
-	public MoveInDirection(Blackboard blackboard, String name) {
+	public MoveInOppositeDirection(Blackboard blackboard, String name) {
 		super(blackboard, name);
 		// TODO Auto-generated constructor stub
 	}
@@ -47,14 +47,24 @@ public class MoveInDirection extends Behavior {
 	public void DoAction() {
 		LogTask("");
 		DebugAction();
-//		LogTask("Doing Action");
-		float distance = bb.carToControl.getPosition().sub( bb.targetLocation ).len();
-		float atSpeed = MathMan.aScaleValue( distance, 0, 40, 0.4f, 1 );
-		float angle = -MathMan.aAngleBetweenPoints( bb.carToControl.getPosition(), bb.targetLocation );
-		angle = MathMan.aConvertToUsableAngle(angle);
-		bb.carToControl.getController().joystickAngle = angle;
-		bb.carToControl.getController().joystickStrength = atSpeed;
+
+		// TODO: Instead of passing around Vehicle objects, change it to BTransform (Position & Angle)
 		
+		// get the car to evade's position for checking distance between the 2 cars
+		
+		// Set our desired angle to be exactly the opposite direction 
+		// that the other car is coming at us from.
+		bb.carToControl.getController().joystickAngle = MathUtils.atan2( 
+				bb.targetLocation.y - bb.carToControl.getPosition().y, 
+				bb.targetLocation.x - bb.carToControl.getPosition().x );
+		
+		bb.carToControl.getController().joystickStrength = 1f; // FULL_THROTTLE;
+		
+//		// if the Car to Evade is too close (20 meters) turn left or right hard and randomly
+//		if( bb.carToControl.getPosition().sub( bb.targetLocation ).len() < 20 ) {
+//			joystickAngle += MathUtils.degreesToRadians * MathUtils.random( -170, 170 ); 	// Random, just turn 90 degrees right for now
+//		}
+				
 		GetControl().FinishWithSuccess();
 	}
 	

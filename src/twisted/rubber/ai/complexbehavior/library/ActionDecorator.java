@@ -54,9 +54,9 @@ public abstract class ActionDecorator extends Task
 	 * Decorate the CheckConditions
 	 */
 	@Override
-	public boolean CheckConditions() 
+	public boolean checkPreConditions() 
 	{
-		return this.task.CheckConditions();
+		return this.task.checkPreConditions();
 	}
 
 	/**

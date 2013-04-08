@@ -14,7 +14,7 @@ import com.biigoh.screens.BattleScreen;
 
 public class FixedFrameRate {
 
-	private final int MAX_FPS = 42;	// this will actaully give us about 60 FPS
+	private final int MAX_FPS = 62;	// this will actaully give us about 60 FPS
 	private final int MAX_FRAME_SKIPS = 10;
 	private final int FPS_PERIOD = 1000 / MAX_FPS;
 	

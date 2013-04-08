@@ -20,9 +20,9 @@ import com.biigoh.utils.MathMan;
 import com.biigoh.utils.Physics;
 import com.biigoh.utils.Vector2Pool;
 
-public class DodgeWallAction extends Behavior {
+public class DodgeWall extends Behavior {
 	
-	private static final String LOG = "@ " + DodgeWallAction.class.getSimpleName();
+	private static final String LOG = "@ " + DodgeWall.class.getSimpleName();
 	private static final Boolean DEBUG = true;
 
 	Vector3 dir;
@@ -41,7 +41,7 @@ public class DodgeWallAction extends Behavior {
 	 * Creates a new instance of the AvoidObstacleAction class
 	 * @param blackboard Reference to the AI Blackboard data
 	 */
-	public DodgeWallAction(Blackboard blackboard) {
+	public DodgeWall(Blackboard blackboard) {
 		super(blackboard);
 	}
 
@@ -50,12 +50,12 @@ public class DodgeWallAction extends Behavior {
 	 * @param blackboard Reference to the AI Blackboard data
 	 * @param name Name of the class, for debug purposes
 	 */
-	public DodgeWallAction(Blackboard blackboard, String name) {
+	public DodgeWall(Blackboard blackboard, String name) {
 		super(blackboard, name);
 	}
 
 	@Override
-	public boolean CheckConditions() {
+	public boolean checkPreConditions() {
 		LogTask("Checking conditions");
 		return true;
 	}
@@ -109,10 +109,8 @@ public class DodgeWallAction extends Behavior {
 
 	@Override
 	public void DoAction() {
-		DebugAction();
-		LogTask("Doing Action");
-		
-		
+		LogTask("");
+		DebugAction();	
 		
 		Vector2 resultingForward = bb.carToControl.getBody().getLinearVelocity().cpy().nor().mul(2);		
 		for( Vector2 vector : normals )
@@ -135,7 +133,7 @@ public class DodgeWallAction extends Behavior {
 			bb.carToControl.getController().joystickStrength = 0.6f;
 		}
 		// No ray is hit so we are clear
-		else
+//		else
 			GetControl().FinishWithSuccess();
 			
 		

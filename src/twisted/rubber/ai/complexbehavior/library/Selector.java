@@ -57,7 +57,7 @@ public class Selector extends Branch
 			curPos++;
 			
 			task = control.subtasks.elementAt(curPos);
-			if(task.CheckConditions())
+			if(task.checkPreConditions())
 			{
 				found = true;
 			}

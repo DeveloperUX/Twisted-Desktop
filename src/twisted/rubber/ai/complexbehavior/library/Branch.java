@@ -57,7 +57,7 @@ public abstract class Branch extends Task
 	 * Checks for the appropiate pre-state of the data
 	 */
 	@Override
-	public boolean CheckConditions() 
+	public boolean checkPreConditions() 
 	{
 		LogTask("Checking conditions");
 		return control.subtasks.size() > 0;
@@ -79,7 +79,7 @@ public abstract class Branch extends Task
 	 */
 	@Override
 	public void DoAction() {
-		LogTask("Doing action");
+//		LogTask("Doing action");
 		if(control.isFinished())
 		{
 			return;
@@ -124,7 +124,7 @@ public abstract class Branch extends Task
 	@Override
 	public void End() 
 	{
-		LogTask("Ending");
+//		LogTask("Ending");
 	}
 
 	/**
@@ -134,7 +134,7 @@ public abstract class Branch extends Task
 	@Override
 	public void Start() 
 	{
-		LogTask("Starting");
+//		LogTask("Starting");
 		control.curTask = control.subtasks.firstElement();
 		if(control.curTask == null)
 		{
