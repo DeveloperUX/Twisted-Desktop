@@ -62,79 +62,81 @@ public class DodgeWall extends Behavior {
 
 	@Override
 	public void Start() {
-		LogTask("Starting");
-		wingHit = Wing.NEITHER;
-		
-		// clear normals from list
-		normals.clear();
-		
-		// Get the distance to look ahead of us depending on how fast we're moving
-		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 80, 10, 50 );
-		// Get a position vector from that distance
-		Vector2 pointAhead = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle(), distanceToLookAhead );
-		// A left and right wing vector 
-		Vector2 rayLeft = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle() + (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
-		Vector2 rayRight = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle() - (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
-		
-		// Forward Raycast callback
-		AIRaycastCallback forwardRayCallback = new AIRaycastCallback();
-		// Left Raycast callback
-		AIRaycastCallback leftRayCallback = new AIRaycastCallback();
-		// Right Raycast callback
-		AIRaycastCallback rightRayCallback = new AIRaycastCallback();
-		
-		// Create and run raycasts
-		BattleScreen.getPhysicsWorld().rayCast( forwardRayCallback, bb.carToControl.getPosition(), pointAhead );
-		BattleScreen.getPhysicsWorld().rayCast( leftRayCallback, bb.carToControl.getPosition(), rayLeft );
-		BattleScreen.getPhysicsWorld().rayCast( rightRayCallback, bb.carToControl.getPosition(), rayRight );
-		// Check which raycasts were hit
-		bb.forwardRayHit = obstacleAhead(forwardRayCallback);
-		bb.leftRayHit = obstacleAhead(leftRayCallback);
-		bb.rightRayHit = obstacleAhead(rightRayCallback);
-		
-		if( bb.leftRayHit && bb.rightRayHit )
-			wingHit = Wing.BOTH;
-		else if( bb.leftRayHit )
-			wingHit = Wing.LEFT;
-		else if( bb.rightRayHit )
-			wingHit = Wing.RIGHT;
+//		LogTask("Starting");
+//		wingHit = Wing.NEITHER;
+//		
+//		// clear normals from list
+//		normals.clear();
+//		
+//		// Get the distance to look ahead of us depending on how fast we're moving
+//		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 80, 10, 50 );
+//		// Get a position vector from that distance
+//		Vector2 pointAhead = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle(), distanceToLookAhead );
+//		// A left and right wing vector 
+//		Vector2 rayLeft = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle() + (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
+//		Vector2 rayRight = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle() - (8/distanceToLookAhead), distanceToLookAhead * 0.5f );
+//		
+//		// Forward Raycast callback
+//		AIRaycastCallback forwardRayCallback = new AIRaycastCallback();
+//		// Left Raycast callback
+//		AIRaycastCallback leftRayCallback = new AIRaycastCallback();
+//		// Right Raycast callback
+//		AIRaycastCallback rightRayCallback = new AIRaycastCallback();
+//		
+//		// Create and run raycasts
+//		BattleScreen.getPhysicsWorld().rayCast( forwardRayCallback, bb.carToControl.getPosition(), pointAhead );
+//		BattleScreen.getPhysicsWorld().rayCast( leftRayCallback, bb.carToControl.getPosition(), rayLeft );
+//		BattleScreen.getPhysicsWorld().rayCast( rightRayCallback, bb.carToControl.getPosition(), rayRight );
+//		// Check which raycasts were hit
+//		bb.forwardRayHit = obstacleAhead(forwardRayCallback);
+//		bb.leftRayHit = obstacleAhead(leftRayCallback);
+//		bb.rightRayHit = obstacleAhead(rightRayCallback);
+//		
+//		if( bb.leftRayHit && bb.rightRayHit )
+//			wingHit = Wing.BOTH;
+//		else if( bb.leftRayHit )
+//			wingHit = Wing.LEFT;
+//		else if( bb.rightRayHit )
+//			wingHit = Wing.RIGHT;
 		
 	}
 
 	@Override
 	public void End() {
-		LogTask("Ending");
-		wingHit = Wing.NEITHER;
+//		LogTask("Ending");
+//		wingHit = Wing.NEITHER;
 	}
 
 	@Override
 	public void DoAction() {
 		LogTask("");
 		DebugAction();	
+
+		bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(10) );
+		bb.carToControl.getController().joystickStrength = 0.6f;
 		
-		Vector2 resultingForward = bb.carToControl.getBody().getLinearVelocity().cpy().nor().mul(2);		
-		for( Vector2 vector : normals )
-			resultingForward.add(vector);
+//		Vector2 resultingForward = bb.carToControl.getBody().getLinearVelocity().cpy().nor().mul(2);		
+//		for( Vector2 vector : normals )
+//			resultingForward.add(vector);
+//		
+//		if( bb.forwardRayHit && (!bb.rightRayHit && !bb.leftRayHit) )
+//			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), resultingForward.nor() );
+//		// Steer to the left
+//		else if( bb.forwardRayHit || (bb.leftRayHit && bb.rightRayHit && bb.forwardRayHit) ) 
+//			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );			 
+//		// Steer right
+//		else if( (bb.leftRayHit && bb.forwardRayHit) || bb.leftRayHit )
+//			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(-90) );		
+//		// Steer left
+//		else if( bb.rightRayHit || (bb.rightRayHit && bb.forwardRayHit) )
+//			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );		
+//		// Slow down and steer left
+//		else if( bb.forwardRayHit ) {
+//			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );
+//			bb.carToControl.getController().joystickStrength = 0.6f;
+//		}
 		
-		if( bb.forwardRayHit && (!bb.rightRayHit && !bb.leftRayHit) )
-			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), resultingForward.nor() );
-		// Steer to the left
-		else if( bb.forwardRayHit || (bb.leftRayHit && bb.rightRayHit && bb.forwardRayHit) ) 
-			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );			 
-		// Steer right
-		else if( (bb.leftRayHit && bb.forwardRayHit) || bb.leftRayHit )
-			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(-90) );		
-		// Steer left
-		else if( bb.rightRayHit || (bb.rightRayHit && bb.forwardRayHit) )
-			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );		
-		// Slow down and steer left
-		else if( bb.forwardRayHit ) {
-			bb.carToControl.getController().joystickAngle = MathMan.aAngleBetweenVectors( Vector2Pool.obtain(), bb.carToControl.getBody().getLinearVelocity().rotate(90) );
-			bb.carToControl.getController().joystickStrength = 0.6f;
-		}
-		// No ray is hit so we are clear
-//		else
-			GetControl().FinishWithSuccess();
+		GetControl().FinishWithSuccess();
 			
 		
 		

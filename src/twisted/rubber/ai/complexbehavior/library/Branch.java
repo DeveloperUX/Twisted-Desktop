@@ -59,7 +59,7 @@ public abstract class Branch extends Task
 	@Override
 	public boolean checkPreConditions() 
 	{
-		LogTask("Checking conditions");
+//		LogTask("Checking conditions");
 		return control.subtasks.size() > 0;
 	}
 	

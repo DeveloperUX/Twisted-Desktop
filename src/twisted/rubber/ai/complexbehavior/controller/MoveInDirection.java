@@ -48,9 +48,9 @@ public class MoveInDirection extends Behavior {
 		LogTask("");
 		DebugAction();
 //		LogTask("Doing Action");
-		float distance = bb.carToControl.getPosition().sub( bb.targetLocation ).len();
+		float distance = bb.carToControl.getPosition().sub( bb.closestEnemy.getPosition() ).len();
 		float atSpeed = MathMan.aScaleValue( distance, 0, 40, 0.4f, 1 );
-		float angle = -MathMan.aAngleBetweenPoints( bb.carToControl.getPosition(), bb.targetLocation );
+		float angle = -MathMan.aAngleBetweenPoints( bb.carToControl.getPosition(), bb.closestEnemy.getPosition() );
 		angle = MathMan.aConvertToUsableAngle(angle);
 		bb.carToControl.getController().joystickAngle = angle;
 		bb.carToControl.getController().joystickStrength = atSpeed;

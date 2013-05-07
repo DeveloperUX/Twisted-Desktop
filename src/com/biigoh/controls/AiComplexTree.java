@@ -102,7 +102,7 @@ public class AiComplexTree extends Controller {
 		
 			
 		// Ram Car Sequence
-//		Task ramEnemy = new Sequence(blackboard, "Melee");		
+//		Task ramEnemy = new Sequence(blackboarIsInvd, "Melee");		
 //		((BranchController) ramEnemy.GetControl()).add(new IsEnemyClose(blackboard, "(C) Enemy Close?"));
 //		((BranchController) ramEnemy.GetControl()).add(new IsEnemyAhead(blackboard, "(C) Enemy Ahead?"));
 //		((BranchController) ramEnemy.GetControl()).add(new RamEnemy(blackboard, "(A) Ram Car"));
@@ -127,8 +127,8 @@ public class AiComplexTree extends Controller {
 		// Add to planner
 //		((BranchController) root.GetControl()).add(dodge);
 //		((BranchController) root.GetControl()).add(new FindNearestEnemy(blackboard, "(A) Find Nearest Enemy"));
-		((BranchController) root.GetControl()).add(dodge);
 		((BranchController) root.GetControl()).add(maneuver);
+		((BranchController) root.GetControl()).add(dodge);
 						
 	}
 	

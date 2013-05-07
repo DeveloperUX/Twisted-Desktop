@@ -1,18 +1,9 @@
 package com.biigoh.screens;
 
 
-import java.io.OutputStream;
-import java.util.ArrayList;
-
-//import aurelienribon.tweenengine.BaseTween;
-//import aurelienribon.tweenengine.Tween;
-//import aurelienribon.tweenengine.TweenCallback;
-//import aurelienribon.tweenengine.TweenEquations;
-//import aurelienribon.tweenengine.TweenManager;
-
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,13 +12,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.biigoh.controls.AIController;
 import com.biigoh.controls.AiComplexTree;
 import com.biigoh.controls.FireButton;
 import com.biigoh.controls.HumanController;
@@ -54,7 +46,7 @@ import com.biigoh.utils.MathMan;
 import com.biigoh.utils.TileMapLoader;
 import com.biigoh.view.BattleArena;
 import com.biigoh.view.ChaseCamera;
-//import com.biigoh.view.ChaseCameraAccessor;
+import com.jcraft.jorbis.Block;
 
 public class BattleScreen extends AbstractScreen {
 	
@@ -65,7 +57,7 @@ public class BattleScreen extends AbstractScreen {
 	private static final boolean DEBUG_POSITIONS = false;
 	public static final boolean DEBUG = false;
 
-	public static final int ENEMY_NUM = 1;
+	public static final int ENEMY_NUM = 4;
 	public final String LOG = "@ " + BattleScreen.class.getSimpleName();
 		
 	private static World world;	// Physics World representation of game
@@ -229,9 +221,10 @@ public class BattleScreen extends AbstractScreen {
 		font = new BitmapFont();
 		font.setScale( 0.8f );
 		
-		debugBox = new Sprite( new Texture( Gdx.files.internal("debug/DebugBox.png") ) );
-		debugBox.setScale( 1f, 1.4f);
-		debugBox.setPosition( 0, hudStage.getCamera().viewportHeight - 110 );
+//		debugBox = new Sprite( new Texture( Gdx.files.internal("debug/DebugBox.png") ) );
+		debugBox = new Sprite( new Texture( Gdx.files.internal("hud/radar-md.png") ) );
+		debugBox.setScale( 0.5f, 0.5f);
+		debugBox.setPosition( -60, hudStage.getCamera().viewportHeight - 230 );
 		
 		// ------------- FONT FOR GAME --------------- //
 		gameFont = new BitmapFont();
@@ -508,13 +501,29 @@ public class BattleScreen extends AbstractScreen {
 		
 		calculateSpeed( heroMustang, delta );		
 		
+		debugRenderer.setProjectionMatrix(cameraMiniMap.combined);
+		debugRenderer.begin(ShapeType.Rectangle);
+//		for(Block block : world.getBlocks()) {
+//			Rectangle rect = block.getBounds();
+//			float x1 = block.getPosition().x + rect.x;
+//			float y1 = block.getPosition().y + rect.y;
+//			debugRenderer.setColor(new Color(1, 0, 0, 1));
+//			debugRenderer.rect(x1, y1, rect.width, rect.height);
+//		}
+
+			debugRenderer.setColor(new Color(1, 0, 0, 1));
+			debugRenderer.rect(10, 10, 6, 6);
+		debugRenderer.end();
+		
 		hudStage.getSpriteBatch().begin();
 			debugBox.draw( hudStage.getSpriteBatch() );
 			font.setColor( 0, 0, 0, 1 );
-			font.drawMultiLine(hudStage.getSpriteBatch(), debugStr, 10, hudStage.getCamera().viewportHeight - 20);
+//			font.drawMultiLine(hudStage.getSpriteBatch(), debugStr, 10, hudStage.getCamera().viewportHeight - 20);
 			gameFont.draw( hudStage.getSpriteBatch(), gameStr, hudStage.getCamera().viewportWidth / 2 - 140, hudStage.getCamera().viewportHeight / 2 + 80 );
 		hudStage.getSpriteBatch().end();
 	}
+	
+	public ShapeRenderer debugRenderer = new ShapeRenderer();
 	
 	public static String debugStr = "";
 	public static String debugCurAiState = "";

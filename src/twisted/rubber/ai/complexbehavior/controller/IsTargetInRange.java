@@ -34,7 +34,7 @@ public class IsTargetInRange extends Behavior {
 	public void DoAction() {	
 		LogTask("");
 		DebugAction();	
-		if( bb.targetLocation.cpy().sub( bb.carToControl.getPosition() ).len() < RANGE ) {
+		if( bb.closestEnemy.getPosition().cpy().sub( bb.carToControl.getPosition() ).len() < RANGE ) {
 			LogTask("In Range");
 			GetControl().FinishWithSuccess();
 		}

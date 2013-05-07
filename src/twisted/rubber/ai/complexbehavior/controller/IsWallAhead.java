@@ -40,7 +40,7 @@ public class IsWallAhead extends Behavior {
 	public void DoAction() {
 		DebugAction();
 		// Get the distance to look ahead of us depending on how fast we're moving
-		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 80, 10, 50 );
+		float distanceToLookAhead = MathMan.aScaleValue( bb.carToControl.currentSpeed, 0, 80, 5, 100 );
 		// Get a position vector from that distance
 		Vector2 pointAhead = MathMan.aPointFromDirection( bb.carToControl.getPosition(), bb.carToControl.getAngle(), distanceToLookAhead );
 		// A left and right wing vector 
@@ -73,11 +73,11 @@ public class IsWallAhead extends Behavior {
 		
 		// If any raycast was hit finish with success
 		if( bb.forwardRayHit || bb.leftRayHit || bb.rightRayHit ) {
-			LogTask("YES");
+//			LogTask("YES");
 			GetControl().FinishWithSuccess();		
 		}
 		else {
-			LogTask("NO");
+//			LogTask("NO");
 			GetControl().FinishWithFailure();
 		}
 	}

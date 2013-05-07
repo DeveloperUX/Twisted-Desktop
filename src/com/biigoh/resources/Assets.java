@@ -61,6 +61,7 @@ public class Assets {
 		
 	public static Texture FireButton;
 	public static Texture SwitchButton;
+	public static Texture Radar;
 	
 	public static Texture Boss_1;
 	public static Texture Mustang_1;
@@ -119,6 +120,7 @@ public class Assets {
 		load( "hud/aSwitchButton.png", AssetType.TEXTURE );
 		load( "hud/controlBase.png", AssetType.TEXTURE );
 		load( "hud/controlKnob.png", AssetType.TEXTURE );
+		load( "hud/radar.png", AssetType.TEXTURE );
 		
 		load( "cars/Boss_1.png", AssetType.TEXTURE );
 		load( "cars/Roadster_1.png", AssetType.TEXTURE );
@@ -237,6 +239,7 @@ public class Assets {
 		SwitchButton = get( "hud/aSwitchButton.png", AssetType.TEXTURE );
 		ControlBase = get( "hud/controlBase.png", AssetType.TEXTURE );
 		ControlKnob = get( "hud/controlKnob.png", AssetType.TEXTURE );
+		Radar = get( "hud/radar.png", AssetType.TEXTURE );
 		
 		Boss_1 = get( "cars/Boss_1.png", AssetType.TEXTURE );
 		Roadster_1 = get( "cars/Roadster_1.png", AssetType.TEXTURE );
